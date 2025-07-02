@@ -1,5 +1,7 @@
 
-import L from 'leaflet';
+import * as L from 'https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js';
+
+const map = L.map('map').setView([50.0755, 14.4378], 13);
 
 const logoSVG = `<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 143.4343">
 <defs>
