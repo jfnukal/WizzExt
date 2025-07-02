@@ -555,8 +555,14 @@ class PPLWidget {
       }, 500);
 
       // KROK B: Aplikuj filtry a zobraz mapu
-      console.log('🔍 loadAccessPoints: Before applyFilters(), geolocationDenied =', this.geolocationDenied);
-      this.applyFilters();
+     console.log('🔍 loadAccessPoints: Before applyFilters(), geolocationDenied =', this.geolocationDenied);
+
+      // NOVÁ KONTROLA: Pokud byla geolokace zamítnuta, NEAPLIKUJ filtry!
+          if (!this.geolocationDenied) {
+            this.applyFilters();
+          } else {
+            console.log('🔍 loadAccessPoints: Geolokace zamítnuta, přeskakuji applyFilters()');
+          }
 
       // KROK C: Načti detaily pro první batch sidebaru (asynchronně)
       setTimeout(() => {
