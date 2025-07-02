@@ -1,0 +1,518 @@
+/* === DESKTOP STYLY (min-width: 769px) === */
+
+/* === HLAVNÍ KONTEJNER === */
+.ppl-widget-container {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* === LEVÝ PANEL (SIDEBAR) === */
+.ppl-sidebar {
+  flex: 0 0 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+
+/* === SEARCH SEKCE === */
+.ppl-search-section {
+  background: var(--ppl-white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.ppl-search-input-wrapper {
+  position: relative;
+}
+
+.ppl-search-input {
+  width: 100%;
+  height: 44px;
+  padding: 10px 44px 10px 16px;
+  font-size: 16px;
+  border: 1px solid var(--ppl-border);
+  border-radius: 8px;
+}
+
+.ppl-search-input:focus {
+  border-color: var(--ppl-primary);
+  outline: none;
+}
+
+.ppl-search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+}
+
+/* Search suggestions dropdown */
+.ppl-search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: var(--ppl-white);
+  border: 1px solid var(--ppl-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.ppl-suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.ppl-suggestion-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* === RYCHLÉ FILTRY === */
+.ppl-quick-filters {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  position: relative;
+}
+
+.ppl-quick-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  height: 40px;
+  background: var(--ppl-white);
+  border: 1px solid var(--ppl-border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--ppl-text-primary);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.ppl-quick-filter:hover {
+  background-color: #f8f9fa;
+  border-color: var(--ppl-primary);
+}
+
+.ppl-quick-filter.active {
+  background-color: var(--ppl-primary);
+  color: var(--ppl-white);
+  border-color: var(--ppl-primary);
+}
+
+/* Dropdown pro typ místa */
+.ppl-type-dropdown,
+.ppl-payment-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: var(--ppl-white);
+  border: 1px solid var(--ppl-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 12px;
+  min-width: 200px;
+  z-index: 50;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s ease;
+}
+
+.ppl-type-dropdown.open,
+.ppl-payment-dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* === VÝSLEDKY VYHLEDÁVÁNÍ === */
+.ppl-results-section {
+  background: var(--ppl-white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  flex: 1;
+  overflow-y: auto;
+}
+
+.ppl-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ppl-border);
+}
+
+.ppl-results-count {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ppl-text-primary);
+}
+
+.ppl-toggle-panel-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--ppl-white);
+  border: 1px solid var(--ppl-border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--ppl-text-primary);
+  transition: all 0.2s ease;
+}
+
+.ppl-toggle-panel-btn:hover {
+  background-color: #f8f9fa;
+  border-color: var(--ppl-primary);
+}
+
+/* === KARTIČKY VÝSLEDKŮ === */
+.ppl-result-item {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: var(--ppl-white);
+  border: 1px solid var(--ppl-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ppl-result-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.ppl-result-item.selected {
+  border-color: var(--ppl-primary);
+  background-color: #f0f7ff;
+}
+
+.ppl-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ppl-result-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ppl-primary);
+  margin-right: 12px;
+}
+
+.ppl-select-btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  background: var(--ppl-white);
+  color: var(--ppl-primary);
+  border: 1px solid var(--ppl-primary);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.ppl-select-btn:hover {
+  background-color: var(--ppl-primary);
+  color: var(--ppl-white);
+}
+
+/* === MAPA === */
+.ppl-map-container {
+  flex: 1;
+  height: calc(100vh - 48px);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+/* === KOMPLETNÍ FILTR (MODAL) === */
+.ppl-filter-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.ppl-filter-modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ppl-filter-content {
+  background: var(--ppl-white);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.ppl-filter-modal.open .ppl-filter-content {
+  transform: scale(1);
+}
+
+.ppl-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--ppl-border);
+}
+
+.ppl-filter-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ppl-text-primary);
+}
+
+.ppl-filter-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.ppl-filter-close:hover {
+  background-color: #f0f0f0;
+}
+
+.ppl-filter-body {
+  padding: 24px;
+}
+
+/* Kategorie filtrů */
+.ppl-filter-category {
+  margin-bottom: 24px;
+}
+
+.ppl-filter-category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ppl-filter-category-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ppl-text-primary);
+}
+
+.ppl-filter-category-content {
+  margin-top: 12px;
+  display: none;
+}
+
+.ppl-filter-category-content.expanded {
+  display: block;
+}
+
+.ppl-filter-option {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.ppl-filter-option label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.ppl-filter-footer {
+  display: flex;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 1px solid var(--ppl-border);
+}
+
+.ppl-filter-footer button {
+  flex: 1;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+/* === DETAIL VÝDEJNÍHO MÍSTA === */
+#vmDetailContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.vm-detail-panel {
+  background-color: var(--ppl-white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.vm-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #eee;
+}
+
+.vm-detail-content {
+  padding: 30px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* === OTEVÍRACÍ DOBA === */
+.opening-hours-container {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.opening-hours-toggle {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ppl-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--ppl-white);
+  border: 1px solid var(--ppl-border);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--ppl-text-secondary);
+  transition: all 0.2s ease;
+}
+
+.ppl-toggle-btn.active {
+  background-color: var(--ppl-primary);
+  color: var(--ppl-white);
+  border-color: var(--ppl-primary);
+}
+
+.opening-hours-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.opening-hours-day-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.opening-hours-day-row:last-child {
+  border-bottom: none;
+}
+
+.opening-hours-day-name {
+  font-weight: 500;
+  color: var(--ppl-text-primary);
+  min-width: 80px;
+}
+
+.opening-hours-time {
+  color: var(--ppl-text-secondary);
+}
+
+/* === HODNOCENÍ === */
+.ppl-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ppl-star {
+  width: 16px;
+  height: 16px;
+  color: #fbbf24;
+}
+
+.ppl-star.empty {
+  color: #e0e0e0;
+}
+
+/* === ŠTÍTKY === */
+.ppl-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ppl-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: #f3f4f6;
+  border-radius: 16px;
+  font-size: 12px;
+  color: var(--ppl-text-secondary);
+}
+
+.ppl-tag-icon {
+  width: 14px;
+  height: 14px;
+}

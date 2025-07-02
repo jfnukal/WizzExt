@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test PPL Widgetu</title>
+   <!-- Společné styly pro mobil i desktop -->
+<link rel="stylesheet" href="/src/styles-common.css" />
+
+<!-- Mobilní styly - načítají se pouze pro zařízení do 768px -->
+<link rel="stylesheet" href="/src/styles-mobile.css" media="(max-width: 768px)" />
+
+<!-- Desktop styly - načítají se pouze pro zařízení nad 769px -->
+<link rel="stylesheet" href="/src/styles-desktop.css" media="(min-width: 769px)" />
+  </head>
+  <body>
+    <h1>Stránka mého e-shopu</h1>
+    <div
+      id="ppl-parcelshop-map"
+      data-country="CZ"
+      data-center-lat="50.0755"
+      data-center-lng="14.4378"
+    ></div>
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      document.addEventListener('pplPointSelected', (event) => {
+        console.log('ZÁKAZNÍK OBDRŽEL DATA:', event.detail);
+      });
+    </script>
+  </body>
+</html>

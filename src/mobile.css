@@ -1,0 +1,210 @@
+/* mobile.css */
+/* @import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'); */
+
+/* Styly pro tablety a menší desktopy */
+@media (max-width: 768px) {
+  .ppl-content {
+    display: flex;
+    height: 100%;
+    min-height: 700px;
+  }
+
+  /* Na mobilu skryj toggle button */
+  .ppl-panel-toggle {
+    display: none;
+  }
+
+  .ppl-logo img {
+    max-width: 150px;
+  }
+
+  .ppl-sidebar {
+    width: 380px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
+    max-height: 600px;
+  }
+
+  /* Rychlé filtry na mobilu */
+  .ppl-quick-filters-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    width: auto;
+    height: auto;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .ppl-quick-filters {
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    width: auto;
+  }
+
+  .ppl-quick-filter {
+    min-width: auto;
+    flex: 1 1 calc(50% - 3px);
+    max-width: 160px;
+    padding: 8px 12px;
+  }
+
+  .ppl-quick-filter .filter-text {
+    font-size: 14px;
+    width: auto;
+  }
+
+  /* Specifické úpravy pro větší tlačítka */
+  .ppl-quick-filter.all-filters {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .ppl-quick-filter.weekend-filter {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  /* Zoom tlačítka na mobilu */
+  .ppl-map-controls {
+    right: 10px;
+    bottom: 70px;
+    gap: 20px;
+    width: 50px;
+    height: 180px;
+  }
+
+  .ppl-zoom-controls {
+    width: 50px;
+    height: 100px;
+    gap: 8px;
+  }
+
+  .ppl-zoom-btn {
+    width: 50px;
+    height: 50px;
+    padding: 15px;
+  }
+
+  .ppl-location-btn {
+    width: 50px;
+    height: 50px;
+    padding: 13px;
+  }
+
+  /* Attribution na mobilu */
+  .ppl-map-attribution {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 2px 4px;
+    gap: 6px;
+    width: auto;
+    min-width: 200px;
+    max-width: calc(100% - 10px);
+    height: 28px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 6px;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+  }
+}
+
+/* Styly pro malé mobilní telefony */
+@media (max-width: 480px) {
+  .ppl-quick-cards {
+    max-width: 100%;
+    gap: 3px;
+    margin-left: -8px;
+    overflow-x: auto; /* Na mobilu povolíme scroll */
+  }
+
+  .quick-card {
+    min-width: 70px !important;
+    max-width: 150px !important;
+    flex-shrink: 0 !important; /* Na mobilu se nesmí zmenšovat */
+  }
+
+  .quick-card-text,
+  .opening-hours-text {
+    font-size: 10px !important;
+    min-width: 50px !important;
+    max-width: 120px !important;
+  }
+
+  .quick-card-icon {
+    width: 9px !important;
+    height: 9px !important;
+  }
+
+  .ppl-result-header {
+    max-width: 100%;
+    gap: 8px;
+  }
+
+  .ppl-select-btn {
+    min-width: 72px;
+    flex-shrink: 0;
+  }
+
+  .ppl-result-name {
+    max-width: calc(100% - 90px);
+    min-width: 0;
+  }
+
+  .ppl-result-header > div:first-child {
+    flex: 1;
+    min-width: 0;
+    max-width: calc(100% - 80px);
+  }
+
+  .ppl-search-suggestions {
+    max-height: 300px;
+  }
+
+  .ppl-suggestion-item {
+    padding: 10px 12px;
+    min-height: 40px;
+  }
+
+  .ppl-suggestion-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .ppl-suggestion-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .ppl-suggestion-main {
+    font-size: 13px;
+  }
+
+  .ppl-suggestion-secondary {
+    font-size: 12px;
+    color: #505e6c;
+  }
+
+  .quick-card.opening-hours .opening-hours-text {
+    font-size: 10px !important;
+    min-width: 70px !important;
+    max-width: 150px !important;
+  }
+}

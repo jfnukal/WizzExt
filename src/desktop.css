@@ -1,0 +1,3819 @@
+/* desktop.css */
+
+/* @import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'); */
+
+/* Alternativa - pouze centrování bez pozadí */
+#ppl-parcelshop-map {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* nebo center pro vertikální centrování */
+  min-height: 100vh;
+  width: 100%;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.ppl-widget {
+  font-family: Roboto;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1400px;
+  min-height: 700px;
+  height: 700px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  margin: 0 auto; /* Horizontální centrování */
+}
+
+.ppl-header {
+  display: none;
+}
+
+.ppl-content {
+  display: flex;
+  height: 100%;
+  position: relative;
+  overflow: visible;
+}
+
+.ppl-sidebar {
+  width: 380px;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  height: 100%;
+  max-height: 700px;
+  flex-shrink: 0;
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ppl-search-section {
+  padding: 18px 34px 4px 10px;
+  background: #ffffff;
+}
+
+.ppl-logo {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.ppl-logo img {
+  max-width: 200px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.ppl-search-input {
+  width: 100%;
+  height: 45px;
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #e0e2e5;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  font-size: 14px;
+  background: #ffffff;
+  color: #505e6c;
+  box-sizing: border-box;
+  outline: none;
+  max-width: 100%;
+}
+
+.ppl-search-input:focus {
+  border-color: #004b93;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1),
+    0 0 0 2px rgba(0, 75, 147, 0.1);
+}
+
+.ppl-search-input-wrapper {
+  position: relative;
+  margin-bottom: 16px;
+  padding: 0 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ppl-search-icon {
+  position: absolute;
+  margin-left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 16px;
+  background-color: #004b93;
+  opacity: 0.6;
+  mask: url('data:image/svg+xml;utf8,<svg width="24" height="21" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.6825 16.0547L17.8484 12.6947C17.2907 12.1389 16.3611 12.1389 15.8034 12.3221C16.3611 11.2042 16.7331 9.89684 16.7331 8.4C16.7331 3.73263 13.0143 0 8.36653 0C3.71811 0 0 3.73263 0 8.4C0 13.0674 3.71811 16.8063 8.36653 16.8063C10.7836 16.8063 12.8286 15.8716 14.316 14.3747C14.1297 15.1263 14.5017 15.8716 15.0594 16.2442L19.8935 19.7937C20.8232 20.5389 22.1248 20.3495 22.8682 19.4211L23.0545 19.0421C23.7979 18.1137 23.6122 16.8063 22.6825 16.0547ZM8.36653 14.9368C4.83411 14.9368 1.85937 11.9495 1.85937 8.4C1.85937 4.66737 4.83411 1.86947 8.36653 1.86947C12.0846 1.86947 15.0594 4.66737 15.0594 8.4C15.0594 11.9495 12.0846 14.9368 8.36653 14.9368ZM20.2655 16.4337C20.0798 16.8063 19.7078 16.8063 19.3358 16.6168L16.7331 14.5642C16.3611 14.3747 16.3611 14.0021 16.5467 13.6295C16.7331 13.2568 17.1051 13.2568 17.4764 13.4463L20.2655 15.4989C20.4512 15.6821 20.4512 16.2442 20.2655 16.4337Z" fill="currentColor"/></svg>')
+    no-repeat center;
+  mask-size: cover;
+}
+
+/* === PŮVODNÍ JEDNODUCHÉ FILTRY === */
+.ppl-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ppl-filter-btn {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #e0e2e5;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.ppl-filter-btn:hover {
+  border-color: #0055a4;
+}
+
+.ppl-filter-btn.active {
+  border-color: #003369;
+  background: #e6f0ff;
+  font-weight: bold;
+}
+
+/* === LOADING STYLY === */
+.ppl-loading {
+  padding: 40px;
+  text-align: center;
+  color: #666;
+}
+/* === CLUSTER MARKERY === */
+.cluster-marker {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.cluster-marker:hover {
+  transform: scale(1.1);
+  z-index: 1000;
+}
+
+/* Oprava pro klikatelné SVG ikony na mapě */
+.single-marker {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 1000 !important;
+}
+
+.single-marker svg {
+  pointer-events: none;
+}
+
+.selected-marker {
+  z-index: 1001 !important;
+}
+
+/* Zajistí správné pořadí markerů */
+.leaflet-marker-pane .single-marker {
+  z-index: 600 !important;
+}
+
+.leaflet-marker-pane .selected-marker {
+  z-index: 601 !important;
+}
+
+.leaflet-marker-pane .cluster-marker {
+  z-index: 500 !important;
+}
+
+/* === GLOBÁLNÍ TRANSITIONS === */
+.ppl-quick-filter,
+.ppl-zoom-btn,
+.ppl-location-btn,
+.ppl-result-item,
+.ppl-select-btn {
+  transition: all 0.2s ease-in-out;
+}
+
+/* === VÝSLEDKY === */
+.ppl-results {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0px 8px 24px 8px !important;
+  min-height: 0;
+  contain: layout style;
+  transform: translateZ(0);
+  height: calc(100% - 140px);
+  margin-top: -18px;
+}
+
+/* === HLAVNÍ KARTA VÝSLEDKU === */
+.ppl-result-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 12px 12px 5px 10px;
+  gap: 10px;
+  width: 100%;
+  max-width: 355px;
+  min-height: 120px;
+  background: #ffffff;
+  border-bottom: 1px solid #ccdbe9;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  will-change: transform;
+  transform: translateZ(0);
+  contain: layout style paint;
+}
+
+.ppl-result-item:hover {
+  background: #f8f9fa;
+  transform: translateX(2px);
+}
+
+.ppl-result-item.selected {
+  background: #e6f0ff;
+  border-left: 4px solid #004b93;
+}
+
+/* === HEADER KARTIČKY S OPRAVOU PRO CENTROVANÉ TLAČÍTKO === */
+.ppl-result-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  width: 102%;
+  max-width: 359px;
+  height: 23px;
+  margin-bottom: 14px;
+}
+
+/* Levá část s ikonou a názvem */
+.ppl-result-header > div:first-child {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+/* === IKONY TYPŮ === */
+.ppl-type-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.ppl-type-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* === NÁZEV MÍSTA === */
+.ppl-result-name {
+  flex: 1;
+  max-width: 217px;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 25px;
+  color: #004b93;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* === TLAČÍTKO ZVOLIT - HLAVNÍ OPRAVA === */
+.ppl-select-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 72px;
+  height: 33px;
+  padding: 4px 8px;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #004b93;
+  box-shadow: 0px 2px 2px rgba(74, 117, 158, 0.15);
+  border-radius: 8px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 25px;
+  color: #004b93;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: none;
+  flex-shrink: 0;
+  flex-grow: 0;
+  box-sizing: border-box;
+}
+
+/* Text uvnitř tlačítka */
+.ppl-select-btn > span:first-child {
+  width: auto;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 25px;
+  color: #004b93;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  white-space: nowrap;
+}
+
+/* Šipka pomocí ::after pseudo-elementu */
+.ppl-select-btn::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background: #004b93;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+    no-repeat center;
+  mask-size: cover;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Hover efekt podle Figma */
+.ppl-select-btn:hover {
+  background: linear-gradient(91.73deg, #ccdbe9 -89.8%, #e4edf4 102.31%),
+    #ffffff;
+  border-color: #003369;
+  transform: none;
+}
+
+/* Active stav */
+.ppl-select-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0px 1px 1px rgba(74, 117, 158, 0.15);
+}
+
+/* === DETAILY KARTIČKY === */
+.ppl-result-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0px 0px 0px 12px;
+  width: 100%;
+  max-width: 319px;
+  min-height: 50px;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Vzdálenost s tečkou a adresou */
+.ppl-result-address {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+  width: 100%;
+  max-width: 299px;
+  height: 20px;
+  font-family: 'Roboto';
+  font-size: 14px;
+  line-height: 20px;
+  color: #505e6c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px; /* Sníženo z 8px na 4px */
+  margin-left: -12px;
+  margin-top: -4px; /* Přidáno pro posun nahoru */
+}
+
+/* Tečka mezi prvky */
+.ppl-result-address .dot {
+  width: 3px;
+  height: 3px;
+  background: #505e6c;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Otevírací doba mezi adresou a službami */
+.ppl-result-opening-hours {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 6px;
+  width: 100%;
+  max-width: 299px;
+  height: 20px;
+  font-family: 'Roboto';
+  font-size: 12px;
+  line-height: 20px;
+  color: #505e6c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 6px;
+  margin-left: -12px;
+}
+/* Barevné stavy otevírací doby */
+.ppl-result-opening-hours.open {
+  color: #088662 !important;
+}
+
+.ppl-result-opening-hours.closing {
+  color: #92400b !important;
+}
+
+.ppl-result-opening-hours.closed {
+  color: #aa040e !important;
+}
+
+.ppl-result-opening-hours.nonstop {
+  color: #088662 !important;
+}
+
+/* ZÁKLADNÍ KONTEJNER */
+.ppl-quick-cards {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 4px;
+  width: 100%;
+  max-width: 400px;
+  min-height: 25px;
+  height: 25px;
+  flex-wrap: nowrap;
+  overflow: visible;
+  flex: none;
+  order: 2;
+  align-self: stretch;
+  flex-grow: 0;
+  margin-left: -12px;
+}
+
+/* ZÁKLADNÍ KARTIČKY */
+.quick-card {
+  width: auto !important;
+  min-width: 80px !important; /* MINIMUM pro čitelnost */
+  max-width: 180px !important; /* MAXIMUM aby se nevytáhly příliš */
+  height: 25px !important;
+  flex-shrink: 1 !important;
+  flex-grow: 1 !important; /* PŘIDÁNO: kartičky se rozšíří */
+  white-space: nowrap;
+  overflow: visible; /* ZMĚNA: visible místo hidden */
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0px 8px 0px 0px; /* ROZŠÍŘENO padding z 6px na 8px */
+  gap: 3px;
+  border-radius: 4px;
+  flex: none;
+}
+.quick-card-content {
+  width: auto !important;
+  min-width: 0 !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 3px;
+  height: 25px;
+  flex: 1;
+  order: 0;
+  flex-grow: 1;
+  overflow: visible;
+}
+
+.quick-card-text,
+.opening-hours-text {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  color: #505e6c;
+
+  width: auto !important;
+  min-width: 60px !important; /* MINIMUM pro čitelnost */
+  max-width: 150px !important; /* MAXIMUM */
+  flex: 1;
+
+  white-space: nowrap !important;
+  overflow: visible !important; /* ZMĚNA: visible místo hidden */
+  text-overflow: clip !important; /* ZMĚNA: clip místo ellipsis */
+  height: 25px;
+}
+
+/* === SPECIFICKÉ KARTIČKY - BARVY A POŘADÍ === */
+
+.quick-card.opening-hours .opening-hours-text {
+  min-width: 90px !important;
+  max-width: 180px !important;
+}
+
+/* Platba kartou */
+.quick-card.card-payment {
+  order: 1 !important;
+  min-width: 80px !important;
+  max-width: 120px !important;
+}
+
+/* Víkend */
+.quick-card.weekend-open {
+  order: 2 !important;
+  min-width: 100px !important;
+  max-width: 140px !important;
+}
+
+/* Podání zásilky */
+.quick-card.pickup-enabled {
+  order: 3 !important;
+  min-width: 80px !important;
+  max-width: 120px !important;
+}
+
+/* IKONY - zachovat pevnou velikost */
+.quick-card-icon {
+  width: 11px !important;
+  height: 11px !important;
+  flex-shrink: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px; /* PŘIDÁNO: mezera mezi ikonou a textem */
+}
+
+
+/* === MAPA A RYCHLÉ FILTRY === */
+.ppl-map-container {
+  flex: 1;
+  position: relative;
+  min-height: 700px;
+  height: auto;
+}
+
+/* Rychlé filtry jako overlay na mapě - PEVNÁ POZICE */
+.ppl-quick-filters-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  padding: 0px;
+  pointer-events: none;
+}
+
+/* === RYCHLÉ FILTRY === */
+.ppl-quick-filters {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+  width: 725px;
+  height: 40px;
+  flex-wrap: nowrap;
+  pointer-events: auto;
+}
+
+/* Všechny filtry - AKTIVNÍ tlačítko (modré ohraničení) */
+.ppl-quick-filter.all-filters {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 9px 14px;
+  gap: 9px;
+  width: 146px;
+  height: 40px;
+  background: #ffffff;
+  border: 0px solid #d7d7d7; /* ZMĚNĚNO Z #02213f na #d7d7d7 */
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  cursor: pointer;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  opacity: 0.8;
+}
+
+/* Property 1=Variant2 - aktivní/hover stav */
+.ppl-quick-filter.all-filters.active,
+.ppl-quick-filter.all-filters:hover {
+  background: linear-gradient(91.73deg, #ccdbe9 -89.8%, #e4edf4 102.31%),
+    #ffffff;
+  border: 0px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  opacity: 1;
+}
+
+.ppl-quick-filter.all-filters .filter-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 9px;
+  width: 117px;
+  height: 25px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.ppl-quick-filter.all-filters .filter-icon {
+  width: 22px;
+  height: 22px;
+  background: #004b93;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>')
+    no-repeat center;
+  mask-size: cover;
+  position: relative;
+}
+
+.ppl-quick-filter.all-filters .filter-icon::before {
+  content: '';
+  position: absolute;
+  left: 12.5%;
+  right: 12.5%;
+  top: 12.5%;
+  bottom: 12.5%;
+  background: #004b93;
+}
+
+.ppl-quick-filter.all-filters .filter-text {
+  width: 96px;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #02213f;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* === KOLEČKO S POČTEM FILTRŮ === */
+.ppl-filter-count-badge {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: -8px;
+  right: -8px;
+  background: #004b93;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 25px;
+  color: #ffffff;
+  z-index: 1001;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0.9;
+}
+
+.ppl-filter-count-badge.show {
+  display: flex;
+}
+
+/* Přidáme relative positioning k all-filters tlačítku */
+.ppl-quick-filter.all-filters {
+  position: relative;
+}
+
+/* === DROPDOWN MENU PRO TYP MÍSTA === */
+.ppl-quick-filter-container {
+  position: relative;
+  display: inline-block;
+}
+
+.ppl-type-dropdown {
+  position: absolute;
+  top: 45px;
+  left: 0px;
+  z-index: 1001;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 9px 14px;
+  gap: 9px;
+  width: 139px;
+  height: 72px;
+  background: #ffffff;
+  border: 1px solid #d7d7d7;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 7px;
+  box-sizing: border-box;
+  opacity: 0.9;
+}
+
+.ppl-type-dropdown.open {
+  display: flex;
+}
+
+.dropdown-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 18px;
+  width: 100%;
+  height: 25px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 25px;
+}
+
+.checkbox-container input[type='checkbox'] {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 22px;
+  height: 22px;
+  background: #ffffff;
+  border: 1.5px solid #767676;
+  border-radius: 4px;
+  box-sizing: border-box;
+  position: relative;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.checkbox-container input[type='checkbox']:checked + .checkbox-custom {
+  background: #004b93;
+  border-color: #004b93;
+}
+
+.checkbox-container input[type='checkbox']:checked + .checkbox-custom::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 11px;
+  height: 8px;
+  background: white;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>')
+    no-repeat center;
+  mask-size: cover;
+}
+
+.option-text {
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #505e6c;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Hover stav pro typ místa tlačítko */
+.ppl-quick-filter.type-filter.open {
+  background: linear-gradient(91.73deg, #ccdbe9 -89.8%, #e4edf4 102.31%),
+    #ffffff;
+  border-color: #d7d7d7;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  opacity: 1;
+}
+
+/* Ostatní filtry - NEAKTIVNÍ tlačítka (šedé ohraničení) */
+.ppl-quick-filter {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 9px 14px;
+  gap: 9px;
+  height: 40px;
+  background: #ffffff;
+  border: 0px solid #d7d7d7;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 7px;
+  cursor: pointer;
+  flex: none;
+  flex-grow: 0;
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+.ppl-quick-filter:hover,
+.ppl-quick-filter.active {
+  background: linear-gradient(91.73deg, #ccdbe9 -89.8%, #e4edf4 102.31%),
+    #ffffff;
+  border: 0px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  opacity: 1;
+}
+
+/* Typ místa */
+.ppl-quick-filter.type-filter {
+  width: 144px;
+  order: 1;
+}
+
+.ppl-quick-filter.type-filter .filter-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 16px;
+  width: 116px;
+  height: 25px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.ppl-quick-filter.type-filter .filter-main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 9px;
+  width: 90px;
+  height: 25px;
+  border: 0px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.ppl-quick-filter.type-filter .filter-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.ppl-quick-filter.type-filter .filter-text {
+  width: 70px;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #02213f;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.ppl-quick-filter .dropdown-arrow {
+  width: 9px;
+  height: 6px;
+  background: #02213f;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>')
+    no-repeat center;
+  mask-size: cover;
+}
+
+/* Platba */
+.ppl-quick-filter.payment-filter {
+  width: 123px;
+  order: 2;
+  border: 0px;
+}
+
+.ppl-quick-filter.payment-filter .filter-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 16px;
+  width: 67px;
+  height: 25px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.ppl-quick-filter.payment-filter .filter-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.ppl-quick-filter.payment-filter .filter-text {
+  width: 46px;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #02213f;
+  flex: none;
+  flex-grow: 0;
+}
+
+/* === DROPDOWN MENU PRO PLATBU === */
+.ppl-payment-filter-container {
+  position: relative;
+  display: inline-block;
+}
+
+.ppl-payment-dropdown {
+  position: absolute;
+  top: 45px;
+  left: 0px;
+  z-index: 1001;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 9px 14px;
+  gap: 9px;
+  width: 139px;
+  height: 72px;
+  background: #ffffff;
+  border: 1px solid #d7d7d7;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+
+.ppl-payment-dropdown.open {
+  display: flex;
+  opacity: 0.9;
+}
+
+.payment-dropdown-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 18px;
+  width: 100%;
+  height: 25px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.payment-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.payment-checkbox-container input[type='checkbox'] {
+  display: none;
+}
+
+.payment-checkbox-custom {
+  width: 22px;
+  height: 22px;
+  background: #ffffff;
+  border: 1.5px solid #767676;
+  border-radius: 4px;
+  box-sizing: border-box;
+  position: relative;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.payment-checkbox-container
+  input[type='checkbox']:checked
+  + .payment-checkbox-custom,
+.payment-checkbox-container input[type='checkbox']:checked + .payment-custom {
+  /* Přidána tato řádka */
+  background: #004b93;
+  border-color: #004b93;
+}
+
+.payment-checkbox-container
+  input[type='checkbox']:checked
+  + .payment-checkbox-custom::after,
+.payment-checkbox-container
+  input[type='checkbox']:checked
+  + .payment-custom::after {
+  /* Přidána tato řádka */
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 11px;
+  height: 8px;
+  background: white;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>')
+    no-repeat center;
+  mask-size: cover;
+}
+
+.payment-option-text {
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #505e6c;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Hover stav pro platbu tlačítko */
+.ppl-quick-filter.payment-filter.open {
+  background: linear-gradient(91.73deg, #ccdbe9 -89.8%, #e4edf4 102.31%),
+    #ffffff;
+  border-color: #d7d7d7;
+  opacity: 1;
+}
+
+/* Velikost zásilky */
+.ppl-quick-filter.package-size-filter {
+  width: 180px;
+  order: 3;
+}
+
+.ppl-quick-filter.package-size-filter .filter-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 16px;
+  width: 125px;
+  height: 25px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.ppl-quick-filter.package-size-filter .filter-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.ppl-quick-filter.package-size-filter .filter-text {
+  width: 110px;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #02213f;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Víkend */
+.ppl-quick-filter.weekend-filter {
+  width: 189px;
+  order: 4;
+  opacity: 0.8;
+}
+
+/* Fajfka pro weekend filter když je aktivní */
+.ppl-quick-filter.weekend-filter.active .filter-content::after {
+  content: '';
+  width: 16.3px;
+  height: 12.03px;
+  position: absolute;
+  right: -80px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #02213f;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>')
+    no-repeat center;
+  mask-size: cover;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.ppl-quick-filter.weekend-filter .filter-icon {
+  width: 14px;
+  height: 15px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  position: relative;
+}
+
+.ppl-quick-filter.weekend-filter .filter-text {
+  width: 137px;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #02213f;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.ppl-quick-filter.weekend-filter .filter-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 20px;
+  width: 151px;
+  height: 25px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Skryté filtry */
+.ppl-quick-filter.hidden {
+  display: none;
+}
+/* === MAPA === */
+.ppl-map {
+  width: 100%;
+  height: 100%;
+  transform: translateZ(0);
+}
+
+/* === TLAČÍTKO VÝBĚRU JAZYKA === */
+.ppl-language-selector {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 1002;
+  width: 55px;
+  height: 22px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.08));
+}
+
+.ppl-language-button {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: -2px 8px;
+  gap: 2px;
+  width: 68px;
+  height: 32px;
+  background: #ffffff;
+  border: 1px solid #d7d7d7;
+  border-radius: 8px;
+  cursor: pointer;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 1;
+  outline: none;
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+.ppl-language-button:hover {
+  border-color: #004b93;
+}
+
+.ppl-language-button.open {
+  border-radius: 8px 8px 0px 0px;
+  border-bottom: 1px solid #d7d7d7;
+}
+
+.ppl-language-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 3px;
+  margin: 0 auto;
+  width: 46px;
+  height: 25px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.ppl-language-flag {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Česká vlajka - SVG */
+.ppl-language-flag.czech {
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect fill="%23FFFFFF" width="3" height="1"/><rect fill="%23D80027" y="1" width="3" height="1"/><polygon fill="%2311457E" points="0,0 1.5,1 0,2"/></svg>')
+    no-repeat center;
+  background-size: cover;
+}
+
+/* Britská vlajka - SVG */
+.ppl-language-flag.english {
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect fill="%23012169" width="60" height="30"/><g stroke="%23fff" stroke-width="6"><path d="m0,0 60,30m0-30L0,30"/></g><g stroke="%23C8102E" stroke-width="4"><path d="m0,0 60,30m0-30L0,30"/></g><g stroke="%23fff" stroke-width="10"><path d="M30,0v30M0,15H60"/></g><g stroke="%23C8102E" stroke-width="6"><path d="M30,0v30M0,15H60"/></g></svg>')
+    no-repeat center;
+  background-size: cover;
+}
+
+.ppl-language-text {
+  width: 30px;
+  height: 22px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 25px;
+  color: #02213f;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.ppl-language-arrow {
+  margin: 0 auto;
+  width: 14px;
+  height: 6.25px;
+  background: #02213f;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>')
+    no-repeat center;
+  mask-size: cover;
+  transition: transform 0.2s ease;
+}
+
+.ppl-language-button.open .ppl-language-arrow {
+  transform: rotate(180deg);
+}
+
+/* === DROPDOWN MENU PRO JAZYK === */
+.ppl-language-dropdown {
+  position: absolute;
+  top: 45px;
+  left: 0px;
+  z-index: 1003;
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2px 2px;
+  gap: 5px;
+  width: 68px;
+  height: 61px;
+  border: 1px solid #d7d7d7;
+  border-top: none;
+  border-radius: 0px 0px 8px 8px;
+  background: #ffffff;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.ppl-language-dropdown.open {
+  display: flex;
+}
+
+.ppl-language-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 2px 5px;
+  gap: 9px;
+  width: 55px;
+  height: 22px;
+  background: #ffffff;
+  cursor: pointer;
+  flex: none;
+  align-self: stretch;
+  flex-grow: 0;
+  transition: background 0.2s ease;
+}
+
+.ppl-language-option:hover {
+  background: #f8f9fa;
+}
+
+.ppl-language-option.selected {
+  background: #e6f0ff;
+}
+
+.ppl-language-option:last-child {
+  border-radius: 0px 0px 8px 8px;
+}
+
+/* === ZOOM A LOKACE TLAČÍTKA === */
+.ppl-map-controls {
+  position: absolute;
+  right: 20px;
+  bottom: 80px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0px;
+  gap: 36px;
+  width: 60px;
+  height: 220px;
+}
+
+.ppl-zoom-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 12px;
+  width: 60px;
+  height: 124px;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.ppl-zoom-btn {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 18px;
+  gap: 10px;
+  width: 60px;
+  height: 56px;
+  background: #ffffff;
+  border: 1px solid #ccdbe9;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  cursor: pointer;
+  flex: none;
+  align-self: stretch;
+  flex-grow: 0;
+  transition: all 0.2s ease;
+}
+
+.ppl-zoom-btn:hover {
+  border-color: #004b93;
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.12);
+}
+
+.ppl-zoom-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.ppl-zoom-in {
+  order: 0;
+}
+
+.ppl-zoom-out {
+  order: 1;
+}
+
+.ppl-location-btn {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 18px;
+  gap: 10px;
+  width: 60px;
+  height: 60px;
+  background: #ffffff;
+  border: 1px solid #ccdbe9;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  cursor: pointer;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+  transition: all 0.2s ease;
+}
+
+.ppl-location-btn:hover {
+  border-color: #004b93;
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.12);
+}
+
+.ppl-location-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* === MAP ATTRIBUTION === */
+.ppl-map-attribution {
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 3px 5px;
+  gap: 4px;
+  width: auto;
+  min-width: 250px;
+  max-width: 280px;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 6px;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.attribution-text {
+  width: auto;
+  height: 18px;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #004992;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  white-space: nowrap;
+}
+
+/* === TOGGLE PANEL BUTTON - MODERNÍ VERZE === */
+.ppl-panel-toggle {
+  position: absolute;
+  top: 50%;
+  left: 360px;
+  transform: translateY(-50%);
+  z-index: 9999;
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(145deg, #ffffff, #f0f7ff);
+  border: 2px solid #004b93;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 75, 147, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  /* Pulsing effect */
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.ppl-panel-toggle:hover {
+  background: linear-gradient(145deg, #004b93, #0066cc);
+  box-shadow: 0 6px 20px rgba(0, 75, 147, 0.4);
+}
+
+.ppl-panel-toggle:hover .ppl-panel-toggle-icon {
+  color: white;
+}
+
+.ppl-panel-toggle-icon {
+  width: 24px;
+  height: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #004b93;
+}
+
+.ppl-panel-toggle.collapsed {
+  left: 15px;
+  transform: translateY(-50%);
+}
+
+.ppl-panel-toggle.collapsed .ppl-panel-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Panel collapsed state */
+.ppl-sidebar.collapsed {
+  transform: translateX(-100%);
+}
+
+.ppl-content.sidebar-collapsed .ppl-map-container {
+  width: 100%;
+  flex: none;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ppl-content.sidebar-collapsed .ppl-sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 8888;
+}
+
+/* Floating overlay když je collapsed */
+.ppl-sidebar.collapsed.show-overlay {
+  transform: translateX(0);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ZÁKLADNÍ RESET PRO VŠECHNY STAVY OTEVÍRACÍ DOBY */
+.quick-card.opening-hours,
+.quick-card.opening-hours.open,
+.quick-card.opening-hours.closing,
+.quick-card.opening-hours.closed,
+.quick-card.opening-hours.nonstop {
+  /* Resetujeme všechny speciální styly */
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0px 8px 0px 0px !important; /* Stejné jako ostatní kartičky */
+  margin-right: 0; /* Odstraníme speciální margin */
+
+  /* Základní quick-card styly */
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 3px;
+  height: 25px;
+  flex: none;
+  flex-grow: 1;
+  order: 0 !important; /* Stále první */
+}
+
+/* OBSAH OTEVÍRACÍ DOBY */
+.quick-card.opening-hours .quick-card-content,
+.quick-card.opening-hours.open .quick-card-content,
+.quick-card.opening-hours.closing .quick-card-content,
+.quick-card.opening-hours.closed .quick-card-content,
+.quick-card.opening-hours.nonstop .quick-card-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 3px;
+  height: 25px;
+  flex: 1;
+  order: 0;
+  flex-grow: 1;
+  overflow: visible;
+}
+
+/* TEXT OTEVÍRACÍ DOBY - ZÁKLADNÍ */
+.quick-card.opening-hours .opening-hours-text {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  color: #505e6c; /* Základní šedá jako u ostatních */
+  flex: 1;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  height: 25px;
+  min-width: 90px !important;
+  max-width: 180px !important;
+}
+
+/* === BARVY PODLE STAVU - POUZE PRO TEXT === */
+
+/* OTEVŘENO - zelená */
+.quick-card.opening-hours.open .opening-hours-text {
+  color: #088662 !important;
+}
+
+/* ZAVÍRÁ BRZY - oranžová */
+.quick-card.opening-hours.closing .opening-hours-text {
+  color: #92400b !important;
+}
+
+/* ZAVŘENO - červená */
+.quick-card.opening-hours.closed .opening-hours-text {
+  color: #aa040e !important;
+}
+
+/* NONSTOP - zelená */
+.quick-card.opening-hours.nonstop .opening-hours-text {
+  color: #088662 !important;
+}
+
+/* === VELKÝ FILTR - OPRAVA === */
+/* === VELKÝ FILTR - BEZPEČNÁ VERZE === */
+.ppl-big-filter {
+  position: static;
+  width: 380px;
+  height: 700px;
+  background: #ffffff;
+  z-index: 1010;
+
+  /* Animace */
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  border-right: 1px solid #e0e0e0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ppl-big-filter.show {
+  transform: translateX(0);
+  display: block !important;
+}
+
+.ppl-big-filter-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 339px;
+  height: auto;
+  box-sizing: border-box;
+}
+
+.ppl-filter-header {
+  padding-bottom: 16px;
+
+  width: 100%;
+}
+
+.ppl-back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #004b93;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  cursor: pointer;
+  padding: 8px 0;
+  text-decoration: none;
+  width: auto;
+}
+
+.ppl-back-button:hover {
+  color: #003369;
+}
+
+.ppl-filters-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 12px;
+  width: 100%;
+  height: auto;
+  min-height: 164px;
+}
+
+.ppl-toggle-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 12px;
+  width: 100%;
+  height: auto;
+}
+
+.ppl-toggle-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  width: 100%;
+  min-height: 25px;
+  height: auto;
+}
+
+.ppl-toggle-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ppl-toggle-info span {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  color: #505e6c;
+  white-space: nowrap;
+}
+
+.ppl-toggle-switch {
+  position: relative;
+  width: 40px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-left: 100%;
+}
+
+.ppl-toggle-switch input[type='checkbox'] {
+  display: none;
+}
+
+.ppl-toggle-switch label {
+  display: block;
+  width: 40px;
+  height: 22px;
+  background: rgba(120, 120, 128, 0.16);
+  border-radius: 11px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.ppl-toggle-switch label::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 50%;
+  top: 1px;
+  left: 1px;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15), 0px 3px 1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s;
+}
+
+.ppl-toggle-switch input:checked + label {
+  background: #004b93;
+}
+
+.ppl-toggle-switch input:checked + label::after {
+  transform: translateX(18px);
+}
+
+.ppl-filter-divider {
+  width: 100%;
+  height: 1px;
+  background: #c7dbea;
+  align-self: stretch;
+  margin: 12px 0;
+}
+
+/* Mezera bez čáry */
+.ppl-filter-spacer {
+  width: 100%;
+  height: 0px;
+  flex: none;
+
+  flex-grow: 0;
+}
+
+/* === IKONY PRO VELKÝ FILTR - OPRAVENÉ === */
+
+/* Resetuj styl ikonky */
+.ppl-toggle-icon {
+  width: 24px !important;
+  height: 24px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-size: 24px 24px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent !important;
+  font-size: 0 !important;
+}
+
+/* === SPRÁVNÉ SVG IKONY === */
+
+.ppl-toggle-icon.capacity-icon {
+  background-image: url('data:image/svg+xml;charset=utf-8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.20946 5L1.10308 10.1472H17.4997L22.795 5H6.20946ZM0 19.3387H17.28V11.3115H0V19.3387ZM18.4444 11.0867L23.5916 5.91905V13.3182L18.4444 18.4195V11.0867Z" fill="%23004B93"/></svg>') !important;
+}
+
+.ppl-toggle-icon.pickup-icon {
+  background-image: url('data:image/svg+xml;charset=utf-8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.27569 1.89231L4.00185 3.14769H23.5916V4.23077V5.30769H4.00185L5.27569 6.56923C5.82154 7.11077 5.82154 7.65231 5.27569 8.18769C5.09354 8.55077 4.36615 8.55077 4.00185 8.18769L0 4.23077L4.00185 0.267692C4.36615 -0.0892308 5.09354 -0.0892308 5.27569 0.267692C5.82154 0.809231 5.82154 1.35077 5.27569 1.89231ZM17.28 24H0V16.3115H17.28V24ZM6.20946 10L1.10308 15.1472H17.4997L22.795 10H6.20946ZM18.4444 16.0867L23.5916 10.919V18.3182L18.4444 23.4195V16.0867Z" fill="%23004B93"/></svg>') !important;
+}
+
+.ppl-toggle-icon.hours-icon {
+  background-image: url('data:image/svg+xml;charset=utf-8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM11 6C11 5.44772 11.4477 5 12 5C12.5523 5 13 5.44772 13 6V11H17C17.5523 11 18 11.4477 18 12C18 12.5523 17.5523 13 17 13H12C11.4477 13 11 12.5523 11 12V6Z" fill="%23004B93"/></svg>') !important;
+}
+
+.ppl-toggle-icon.weekend-icon {
+  background-image: url('data:image/svg+xml;charset=utf-8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.21665 4.05933C5.87244 4.05933 5.70033 3.88129 5.70033 3.53114V0.528187C5.70033 0.178041 5.87244 0 6.21665 0C6.5668 0 6.91101 0.178041 6.91101 0.528187V3.53114C6.91101 3.88129 6.5668 4.05933 6.21665 4.05933ZM16.8991 4.05933C16.5371 4.05933 16.1691 3.88129 16.1691 3.53114V0.528187C16.1691 0.178041 16.5371 0 16.8991 0C17.267 0 17.451 0.178041 17.451 0.528187V3.53114C17.451 3.88129 17.267 4.05933 16.8991 4.05933ZM18.715 2.13661H20.8219C21.5222 2.13661 22.2224 2.8369 22.2224 3.53719V22.5994C22.2224 23.2997 21.5222 24 20.8219 24H2.57863C1.70029 24 1 23.2997 1 22.5994V3.53719C1 2.8369 1.70029 2.13661 2.57863 2.13661H4.68544V3.53719C4.68544 4.58763 5.38574 5.28199 6.26407 5.28199C7.31451 5.28199 8.0148 4.58763 8.0148 3.53719V2.13661H15.2076V3.53719C15.2076 4.58763 15.9079 5.28199 16.9584 5.28199C17.8367 5.28199 18.715 4.58763 18.715 3.53719V2.13661ZM19.7655 21.727H3.10681V9.8339H19.7655V21.727Z" fill="%23004B93"/></svg>') !important;
+}
+
+/* --- Start: Styly pro detail výdejního místa (nové a opravené) --- */
+
+#vmDetailContainer {
+  position: fixed; /* Překryje celou obrazovku */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.95); /* Poloprůhledné bílé pozadí */
+  z-index: 1000; /* Bude nad všemi ostatními prvky */
+  display: flex; /* Použito pro centrování vnitřního panelu */
+  justify-content: center; /* Horizontální centrování */
+  align-items: center; /* Vertikální centrování */
+  padding: 20px;
+  box-sizing: border-box; /* Padding zahrnut do šířky/výšky */
+  overflow-y: auto; /* Pokud by byl panel vysoký */
+}
+
+.vm-detail-panel {
+  position: relative; /* Pro správné umístění SVG pozadí */
+  background-color: #ffffff; /* Bílé pozadí panelu */
+  border-radius: 10px; /* Zaoblené rohy */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Výraznější stín */
+  width: 90%; /* Šířka panelu */
+  max-width: 800px; /* Maximální šířka panelu */
+  max-height: 90vh; /* Maximální výška panelu */
+  overflow: hidden; /* Skryje obsah, který přetéká (např. rohy pozadí SVG) */
+  display: flex;
+  flex-direction: column;
+}
+
+.vm-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  background-color: #f5f5f5; /* Světlé pozadí hlavičky */
+  border-bottom: 1px solid #eee;
+}
+
+.vm-detail-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.8em;
+}
+
+#closeVmDetail {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #555;
+  padding: 5px;
+  transition: color 0.2s ease-in-out;
+}
+
+#closeVmDetail:hover {
+  color: #d40511; /* Červená při najetí */
+}
+
+.vm-detail-content {
+  position: relative; /* Důležité pro umístění SVG pozadí */
+  padding: 30px;
+  flex-grow: 1; /* Nechá obsah roztáhnout se */
+  overflow-y: auto; /* Pokud je obsah moc velký, umožní skrolování */
+}
+
+#vmDetailSvgBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Umožní klikat na obsah pod SVG */
+  overflow: hidden; /* Skryje přetékající části SVG */
+  z-index: 0; /* Ujistěte se, že je pod textovým obsahem */
+}
+
+#vmDetailSvgBackground svg {
+  width: 100%; /* SVG se roztáhne na celou šířku kontejneru */
+  height: 100%; /* SVG se roztáhne na celou výšku kontejneru */
+  display: block;
+  /* Důležité: 'preserveAspectRatio' ovlivní, jak se SVG škáluje.
+     Pokud chcete, aby se nedeformovalo a vyplnilo prostor, můžete zkusit 'xMidYMid slice' */
+  /* preserveAspectRatio: xMidYMid slice; */
+  object-fit: cover; /* Alternativa k preserveAspectRatio pro lepší pokrytí */
+}
+
+.vm-detail-content p {
+  position: relative; /* Zajistí, že text je nad SVG */
+  z-index: 1; /* Ujistěte se, že text je nad SVG */
+  color: #333; /* Barva textu pro čitelnost */
+  margin-top: 0;
+}
+
+/* Detail VM */
+.detail-vm-panel {
+  /* Layout */
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px 0px 36px;
+  gap: 24px;
+  
+  /* Pozicování relativně k .ppl-widget */
+  position: absolute;
+  width: 380px;
+  height: calc(100% - 120px);
+  /* left: calc(100% - 630px - 380px); */
+  right: 20px;
+  top: 80px;
+  max-height: 580px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* Vzhled */
+  background: #ffffff;
+  box-shadow: 0px 8px 18px -6px rgba(74, 117, 158, 0.12),
+    0px 12px 42px -4px rgba(74, 117, 158, 0.12);
+  border-radius: 8px;
+  z-index: 2000;
+
+  /* Animace */
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out, 
+              right 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Výchozí stav */
+  transform: translateX(calc(100% + 40px));
+  opacity: 0;
+  pointer-events: none;
+  display: none;
+}
+
+/* Detail panel když je sidebar skrytý */
+.ppl-content.sidebar-collapsed .detail-vm-panel {
+  right: auto;
+  left: 40px;
+}
+
+.detail-vm-panel.show {
+  display: flex;
+  transform: translateX(0);
+  opacity: 0.9;
+  pointer-events: auto;
+}
+
+/* Hlavní info */
+.hlavni-info {
+  /* Auto layout */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px 24px 0px;
+  gap: 6px;
+  isolation: isolate;
+
+  width: 100%; /* Změněno z pevné šířky na 100% pro flexibilitu */
+  /* height: 119px; -- výška nemusí být pevná kvůli obsahu */
+}
+
+/* Inside auto layout */
+.hlavni-info > * {
+  flex: none;
+  order: 0; /* Může být potřeba upravit podle skutečného pořadí elementů */
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Název */
+.nazev {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+
+  width: 100%; /* Změněno na 100% */
+  height: 25px;
+}
+
+/* Inside auto layout */
+.nazev > * {
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+  z-index: 0;
+}
+
+/* Ikona a název */
+.ikona-a-nazev {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+
+  width: 100%; /* Změněno na 100% */
+  height: 25px;
+}
+
+/* Inside auto layout */
+.ikona-a-nazev > * {
+  flex: none;
+  order: 0;
+  flex-grow: 1;
+}
+
+/* Typ VM */
+.typ-vm {
+  width: 24px;
+  height: 24px;
+}
+
+/* Inside auto layout */
+.typ-vm {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Icons - toto je obecné, dejte pozor na kolize */
+/* Pokud se týká specifických ikon uvnitř `.typ-vm`, upřesněte selektor */
+.typ-vm .combined-shape {
+  /* Příklad selektoru pro cestu uvnitř SVG */
+  position: absolute;
+  left: 0%;
+  right: 0%;
+  top: 0%;
+  bottom: 0%;
+  background: #004b93;
+}
+
+/* Název VM */
+.nazev-vm {
+  max-width: 337px;
+  width: auto; /* Změněno na auto, aby se přizpůsobilo obsahu */
+  height: 25px; /* Výšku lze nastavit, pokud je to potřeba pro zarovnání */
+
+  /* Desktop/H4 */
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 520;
+  font-size: 18px;
+  line-height: 25px;
+  /* identical to box height, or 125% */
+
+  color: #004b93;
+  white-space: nowrap; /* Zabraňuje zalomení názvu */
+  overflow: hidden; /* Skryje přesahující text */
+  text-overflow: ellipsis; /* Zobrazí tři tečky u přesahujícího textu */
+  margin: 0; /* Odstranění implicitních marginů */
+}
+
+/* Bezbariérové */
+.bezbarierove {
+  box-sizing: border-box;
+
+  /* Auto layout */
+  display: flex; /* Toto nastavte na 'flex' nebo 'block' pro zobrazení, jinak 'none' */
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 10px;
+  gap: 10px;
+
+  width: auto; /* Změněno na auto, aby se přizpůsobilo obsahu */
+  height: 33px;
+
+  background: #f7f8fa;
+  border: 1px solid #c7dbea;
+  border-radius: 8px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Frame 35 - obecný název, pozor na kolize */
+.bezbarierove .frame-35 {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+
+  width: 18px;
+  height: 20px;
+}
+
+/* Inside auto layout */
+.bezbarierove .frame-35 > * {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Frame 1000003615 - obecný název, pozor na kolize */
+.bezbarierove .frame-1000003615 {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+
+  width: 18px;
+  height: 20px;
+}
+
+/* Inside auto layout */
+.bezbarierove .frame-1000003615 > * {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Vector - upřesněte selektor */
+.bezbarierove .vector {
+  width: 14px;
+  height: 20px;
+
+  background: #004b93;
+}
+
+/* Frame 1000003654 */
+.frame-1000003654 {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+
+  width: 100%; /* Změněno na 100% */
+  height: 25px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 1; /* Změna pořadí, pokud je potřeba */
+  flex-grow: 0;
+  z-index: 1;
+}
+
+/* Vzdálenost */
+.vzdalenost {
+  box-sizing: border-box;
+
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+
+  width: auto; /* Změněno na auto */
+  height: 25px;
+
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* 320 m */
+.vzdalenost p {
+  width: auto; /* Změněno na auto */
+  height: 25px;
+  margin: 0; /* Odstranění implicitních marginů */
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 25px;
+  /* identical to box height, or 179% */
+
+  color: #505e6c;
+}
+
+/* Inside auto layout */
+.vzdalenost p {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Ellipse 1128 */
+.elipsa {
+  width: 3px;
+  height: 3px;
+
+  background: #505e6c;
+  border-radius: 50%; /* Aby byla tečka kulatá */
+
+  /* Inside auto layout */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Adresa */
+.adresa {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 8px;
+
+  width: auto; /* Změněno na auto, aby se přizpůsobilo obsahu */
+  height: 25px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 2;
+  flex-grow: 0;
+}
+
+/* Hybernská 1013/34, Praha */
+.adresa p {
+  width: auto; /* Změněno na auto */
+  height: 25px;
+  margin: 0; /* Odstranění implicitních marginů */
+
+  /* Desktop/Body Text */
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  /* identical to box height, or 156% */
+
+  color: #505e6c;
+  white-space: nowrap; /* Zabraňuje zalomení adresy */
+  overflow: hidden; /* Skryje přesahující text */
+  text-overflow: ellipsis; /* Zobrazí tři tečky u přesahujícího textu */
+}
+
+/* Inside auto layout */
+.adresa p {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Otevřeno a kapacita */
+.otevreno-a-kapacita {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+
+  width: 100%; /* Změněno na 100% */
+  height: 33px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 2; /* Změna pořadí, pokud je potřeba */
+  align-self: stretch;
+  flex-grow: 0;
+  z-index: 2;
+}
+
+/* Frame 1000003626 */
+.frame-1000003626 {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+
+  width: auto; /* Změněno na auto */
+  height: 33px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Otevírací doba */
+.oteviraci-doba {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+
+  width: auto; /* Změněno na auto */
+  height: 33px;
+
+  background: #ffffff;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Frame 1000003595 */
+.oteviraci-doba .frame-1000003595 {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 8px;
+
+  width: auto; /* Změněno na auto */
+  height: 33px;
+}
+
+/* Inside auto layout */
+.oteviraci-doba .frame-1000003595 > * {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Frame 12 */
+.oteviraci-doba .frame-12 {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 6px;
+
+  width: auto; /* Změněno na auto */
+  height: 33px;
+}
+
+/* Inside auto layout */
+.oteviraci-doba .frame-12 > * {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Frame 40 */
+.oteviraci-doba .frame-40 {
+  box-sizing: border-box;
+
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 10px;
+  gap: 10px;
+
+  width: auto; /* Změněno na auto */
+  height: 33px;
+
+  background: linear-gradient(
+      0deg,
+      rgba(0, 186, 133, 0.1),
+      rgba(0, 186, 133, 0.1)
+    ),
+    #ffffff;
+  border: 1px solid rgba(0, 186, 133, 0.5);
+  border-radius: 8px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Frame 35 - obecný název, pozor na kolize */
+.oteviraci-doba .frame-35 {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 18px;
+
+  width: auto; /* Změněno na auto */
+  height: 25px;
+}
+
+/* Inside auto layout */
+.oteviraci-doba .frame-35 > * {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Otevřeno do 11:00 */
+.oteviraci-doba p {
+  width: auto; /* Změněno na auto */
+  height: 25px;
+  margin: 0; /* Odstranění implicitních marginů */
+
+  /* Desktop/Body Text */
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  /* identical to box height, or 156% */
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #017957;
+}
+
+/* Inside auto layout */
+.oteviraci-doba p {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Kapacita */
+.kapacita {
+  box-sizing: border-box;
+
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 10px;
+  gap: 10px;
+
+  width: auto; /* Změněno na auto */
+  height: 33px;
+
+  background: linear-gradient(
+      0deg,
+      rgba(239, 109, 27, 0.1),
+      rgba(239, 109, 27, 0.1)
+    ),
+    #ffffff;
+  border: 1px solid rgba(239, 109, 27, 0.5);
+  border-radius: 8px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Frame 35 - obecný název, pozor na kolize */
+.kapacita .frame-35 {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+
+  width: auto; /* Změněno na auto */
+  height: 25px;
+}
+
+/* Inside auto layout */
+.kapacita .frame-35 > * {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* DHLIcon/Box1 - upřesněte selektor */
+.dhl-icon-box1 {
+  width: 24px;
+  height: 24px;
+}
+
+/* Inside auto layout */
+.dhl-icon-box1 {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Částečně plné */
+.kapacita p {
+  width: auto; /* Změněno na auto */
+  height: 25px;
+  margin: 0; /* Odstranění implicitních marginů */
+
+  /* Desktop/Body Text */
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  /* identical to box height, or 156% */
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #92400b;
+}
+
+/* Inside auto layout */
+.kapacita p {
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Zavřít */
+.zavrit {
+  box-sizing: border-box;
+  z-index: 2010;
+
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; /* Přidáno pro vycentrování ikony */
+  padding: 10px;
+  gap: 10px;
+
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  right: 12px; /* Změněno z `left` na `right` pro umístění vpravo nahoře */
+  top: 12px;
+
+  background: #ffffff;
+  border: 1px solid #d7d7d7;
+  box-shadow: 0px 2px 4px rgba(74, 117, 158, 0.12);
+  border-radius: 8px;
+  cursor: pointer; /* Změna kurzoru na pointer */
+
+  /* Inside auto layout */
+  flex: none;
+  order: 3;
+  flex-grow: 0;
+}
+
+/* Icons/Close/20 */
+.zavrit .icons-close-20 {
+  width: 15px;
+  height: 15px;
+}
+
+/* Inside auto layout */
+.zavrit .icons-close-20 {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Rectangle - upřesněte selektor, pokud se týká cesty uvnitř SVG */
+.zavrit .icons-close-20 rect {
+  visibility: hidden; /* Skryje defaultní pozadí */
+}
+
+/* Combined Shape - upřesněte selektor */
+.zavrit .icons-close-20 path[fill='#02213F'] {
+  /* Position for the X lines within the 20x20 SVG */
+  /* Není potřeba zde position absolute, pokud je to přímo path */
+}
+
+/* Rectangle - upřesněte selektor */
+.zavrit .icons-close-20 rect[fill='#004992'][transform*='rotate(45deg)'] {
+  /* Style for one of the lines of the X */
+}
+
+/* Rectangle - upřesněte selektor */
+.zavrit .icons-close-20 rect[fill='#004992'][transform*='rotate(-45deg)'] {
+  /* Style for the other line of the X */
+}
+
+/* --- Konec: Styly pro detail výdejního místa (nové a opravené) --- */
+
+/* Akční sekce */
+.ppl-action-section {
+  /* Přidána třída pro lepší specifikaci */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 24px;
+  gap: 8px;
+  width: 100%; /* Změněno na 100% pro přizpůsobení rodičovskému prvku */
+  height: 90px;
+  flex: none;
+  order: 2;
+  align-self: stretch;
+  flex-grow: 0;
+  box-sizing: border-box; /* Zajišťuje, že padding je zahrnut do celkové šířky/výšky */
+}
+
+/* Společný styl pro všechny akční kartičky */
+.ppl-action-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 4px;
+  gap: 6px;
+  width: 76px; /* Pevná šířka podle zadání */
+  height: 70px; /* Pevná výška podle zadání */
+  background: #f7f8fa;
+  border: 1px solid #c7dbea;
+  border-radius: 8px;
+  flex: none;
+  flex-grow: 0;
+  cursor: pointer; /* Naznačuje, že prvek je klikatelný */
+  transition: all 0.6s ease; /* Plynulá animace při najetí myší */
+}
+
+.ppl-action-card:hover {
+  border-color: #004b93; /* Změna barvy ohraničení při najetí myší */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Jemný stín při najetí myší */
+}
+
+/* Ikony v akčních kartičkách */
+.ppl-action-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ppl-action-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Text v akčních kartičkách */
+.ppl-action-text {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 25px;
+  color: #02213f;
+  text-align: center;
+  white-space: wrap; /* nowrap - Zabraňuje zalomení textu */
+  overflow: hidden; /* Skryje přesahující text */
+  text-overflow: ellipsis; /* Zobrazí tři tečky u přesahujícího textu */
+  flex: none;
+  flex-grow: 0;
+}
+
+/* Specifické styly pro jednotlivé kartičky */
+
+/* Trasa */
+.ppl-action-card.route .ppl-action-icon {
+  mask: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M15 2L19 8H16V13C16 14.5977 14.7511 15.9037 13.1763 15.9949L13 16H8C7.48716 16 7.06449 16.386 7.00673 16.8834L7 17V22H5V17C5 15.4023 6.24892 14.0963 7.82373 14.0051L8 14H13C13.5128 14 13.9355 13.614 13.9933 13.1166L14 13V8H11L15 2Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M14.5445 5.51373L16.2667 5.51373H14.5445ZM18.795 10H18.795Z" fill="currentColor"/></svg>')
+    no-repeat center;
+  mask-size: cover;
+  background-color: #004b93; /* Barva pro masku */
+}
+
+/* Úložní doba */
+.ppl-action-card.storage-time .ppl-action-text.value {
+  font-weight: 700; /* Dle Figma specifikace "7 DNÍ" */
+  font-size: 18px;
+  line-height: 25px;
+  color: #004b93;
+}
+
+.ppl-action-card.storage-time .ppl-action-icon {
+  /* Ikona úložní doby - zde není SVG v zadání, můžete přidat masku podobně jako u trasy, nebo nechat prázdné */
+  /* Prozatím nechám prázdné, jelikož v obrázku je pouze text "7 DNÍ" bez ikony nahoře */
+  display: none; /* Skryje prázdný kontejner, pokud není ikona */
+}
+
+/* Příjem i výdej zásilek */
+.ppl-action-card.pickup-delivery .ppl-action-icon {
+  mask: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.27569 1.89231L4.00185 3.14769H23.5916V4.23077V5.30769H4.00185L5.27569 6.56923C5.82154 7.11077 5.82154 7.65231 5.27569 8.18769C5.09354 8.55077 4.36615 8.55077 4.00185 8.18769L0 4.23077L4.00185 0.267692C4.36615 -0.0892308 5.09354 -0.0892308 5.27569 0.267692C5.82154 0.809231 5.82154 1.35077 5.27569 1.89231ZM17.28 24H0V16.3115H17.28V24ZM6.20946 10L1.10308 15.1472H17.4997L22.795 10H6.20946ZM18.4444 16.0867L23.5916 10.919V18.3182L18.4444 23.4195V16.0867Z" fill="%23004B93"/></svg>')
+    no-repeat center;
+  mask-size: cover;
+  background-color: #004b93; /* Barva pro masku */
+}
+
+.ppl-action-card.pickup-delivery .ppl-action-text {
+  width: 84px; /* Pevná šířka pro zalomení textu */
+  height: 32px;
+  line-height: 16px; /* Změna line-height pro dvousloupcový text */
+}
+
+/* Sdílet */
+.ppl-action-card.share .ppl-action-icon {
+  mask: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 22C16.1667 22 15.4583 21.7083 14.875 21.125C14.2917 20.5417 14 19.8333 14 19C14 18.9 14.025 18.6667 14.075 18.3L7.05 14.2C6.78333 14.45 6.475 14.6458 6.125 14.7875C5.775 14.9292 5.4 15 5 15C4.16667 15 3.45833 14.7083 2.875 14.125C2.29167 13.5417 2 12.8333 2 12C2 11.1667 2.29167 10.4583 2.875 9.875C3.45833 9.29167 4.16667 9 5 9C5.4 9 5.775 9.07083 6.125 9.2125C6.475 9.35417 6.78333 9.55 7.05 9.8L14.075 5.7C14.0417 5.58333 14.0208 5.47083 14.0125 5.3625C14.0042 5.25417 14 5.13333 14 5C14 4.16667 14.2917 3.45833 14.875 2.875C15.4583 2.29167 16.1667 2 17 2C17.8333 2 18.5417 2.29167 19.125 2.875C19.7083 3.45833 20 4.16667 20 5C20 5.83333 19.7083 6.54167 19.125 7.125C18.5417 7.70833 17.8333 8 17 8C16.6 8 16.225 7.92917 15.875 7.7875C15.525 7.64583 15.2167 7.45 14.95 7.2L7.925 11.3C7.95833 11.4167 7.97917 11.5292 7.9875 11.6375C7.99583 11.7458 8 11.8667 8 12C8 12.1333 7.99583 12.2542 7.9875 12.3625C7.97917 12.4708 7.95833 12.5833 7.925 12.7L14.95 16.8C15.2167 16.55 15.525 16.3542 15.875 16.2125C16.225 16.0708 16.6 16 17 16C17.8333 16 18.5417 16.2917 19.125 16.875C19.7083 17.4583 20 18.1667 20 19C20 19.8333 19.7083 20.5417 19.125 21.125C18.5417 21.7083 17.8333 22 17 22ZM17 20C17.2833 20 17.5208 19.9042 17.7125 19.7125C17.9042 19.5208 18 19.2833 18 19C18 18.7167 17.9042 18.4792 17.7125 18.2875C17.5208 18.0958 17.2833 18 17 18C16.7167 18 16.4792 18.0958 16.2875 18.2875C16.0958 18.4792 16 18.7167 16 19C16 19.2833 16.0958 19.5208 16.2875 19.7125C16.4792 19.9042 16.7167 20 17 20ZM5 13C5.28333 13 5.52083 12.9042 5.7125 12.7125C5.90417 12.5208 6 12.2833 6 12C6 11.7167 5.90417 11.4792 5.7125 11.2875C5.52083 11.0958 5.28333 11 5 11C4.71667 11 4.47917 11.0958 4.2875 11.2875C4.09583 11.4792 4 11.7167 4 12C4 12.2833 4.09583 12.5208 4.2875 12.7125C4.47917 12.9042 4.71667 13 5 13ZM17 6C17.2833 6 17.5208 5.90417 17.7125 5.7125C17.9042 5.52083 18 5.28333 18 5C18 4.71667 17.9042 4.47917 17.7125 4.2875C17.5208 4.09583 17.2833 4 17 4C16.7167 4 16.4792 4.09583 16.2875 4.2875C16.0958 4.47917 16 4.71667 16 5C16 5.28333 16.0958 5.52083 16.2875 5.7125C16.4792 5.90417 16.7167 6 17 6Z" fill="%23004B93"/></svg>')
+    no-repeat center;
+  mask-size: cover;
+  background-color: #004b93; /* Barva pro masku */
+}
+/* Otevírací doba sekce (celý kontejner) */
+.opening-hours-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px 24px;
+  gap: 1px;
+  width: 100%; /* Nastaveno na 100% pro flexibilní šířku */
+  height: auto; /* Výška bude dynamická podle obsahu */
+  flex: none;
+  order: 3; /* Zajišťuje správné pořadí */
+  flex-grow: 0;
+  box-sizing: border-box; /* Zahrnuje padding do šířky */
+}
+
+/* Nadpis "Otevírací doba" */
+.opening-hours-section .section-title {
+  width: auto;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25px;
+  color: #02213f;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin-top: 0; /* Odstranění výchozích marginů h2/p */
+  margin-bottom: 0;
+}
+
+/* Řádek pro jednotlivý den (např. Pondělí 7:00 - 12:00 13:00 - 21:00) */
+.opening-hours-day-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+  width: 100%; /* Nastaveno na 100% */
+  height: 25px;
+  flex: none;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Název dne (Pondělí, Úterý atd.) */
+.opening-hours-day-name {
+  width: 60px; /* Pevná šířka pro zarovnání */
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400; /* Standardní pro většinu dnů */
+  font-size: 14px;
+  line-height: 25px;
+  color: #505e6c;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  white-space: nowrap; /* Zabrání zalomení názvu dne */
+}
+
+/* Časový interval (např. 7:00 - 12:00) */
+.opening-hours-time {
+  width: auto; /* Auto šířka pro čas */
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 25px;
+  color: #505e6c;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  white-space: nowrap; /* Zabrání zalomení času */
+}
+
+/* Speciální styl pro "Pátek" a "7:00 - 11:00" */
+.opening-hours-day-row.highlight .opening-hours-day-name,
+.opening-hours-day-row.highlight .opening-hours-time {
+  font-weight: 700; /* Tučné písmo pro zvýrazněný den */
+}
+
+/* Styl pro "Zavřeno" */
+.opening-hours-day-row .closed-text {
+  width: auto;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 25px;
+  color: #505e6c;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Oddělovač (Rectangle 4628) */
+.opening-hours-section .divider {
+  width: 100%; /* Nastaveno na 100% */
+  height: 1px;
+  background: #c7dbea;
+  flex: none;
+  order: 8; /* Pokud je poslední prvek */
+  align-self: stretch;
+  flex-grow: 0;
+  margin-top: 18px; /* Mezera nad oddělovačem */
+  margin-bottom: 0px; /* Mezera pod oddělovačem */
+}
+
+/* Loading animation pro detail cards */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.ppl-result-item.loading-details {
+  opacity: 0.8;
+}
+
+.ppl-result-item.loading-details .ppl-result-name::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid #e0e0e0;
+  border-top: 2px solid #004b93;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.quick-card.loading {
+  background: #f8f9fa;
+  border: 1px dashed #d0d7de;
+}
+
+.ppl-search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e0e2e5;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 400px;
+  overflow-y: auto;
+  display: none;
+  box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.ppl-search-suggestions.show {
+  opacity: 1;
+  transform: translateY(0);
+  display: block;
+}
+
+.ppl-suggestions-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  padding-bottom: 10px;
+}
+
+.ppl-suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.ppl-suggestion-item:hover {
+  background-color: #f8f9fa;
+}
+
+.ppl-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+/* Speciální styly pro separator */
+.ppl-suggestion-item[data-type='separator'] {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 8px 16px;
+  cursor: default;
+  font-weight: 600;
+  color: #666;
+  font-size: 12px;
+  text-transform: uppercase;
+  min-height: 32px;
+}
+
+.ppl-suggestion-item[data-type='map-location'] {
+  border-left: 3px solid #e74c3c;
+}
+
+.ppl-suggestion-item[data-type='separator']:hover {
+  background-color: #f8f9fa; /* Nezměni barvu při hoveru */
+}
+
+/* Speciální zvýraznění pro map locations */
+.ppl-suggestion-item[data-type='map-location'] {
+  border-left: 3px solid #e74c3c;
+}
+
+.ppl-suggestion-item[data-type='map-location']:hover {
+  background-color: #fff5f5;
+}
+
+/* Speciální zvýraznění pro access points */
+.ppl-suggestion-item[data-type='accesspoint'] {
+  border-left: 3px solid #004b93;
+}
+
+.ppl-suggestion-item[data-type='accesspoint']:hover {
+  background-color: #f0f7ff;
+}
+
+/* Loading a no-results stavy */
+.ppl-suggestion-item[data-type='loading'],
+.ppl-suggestion-item[data-type='no-results'] {
+  cursor: default;
+  font-style: italic;
+  color: #666;
+}
+
+.ppl-suggestion-item[data-type='loading']:hover,
+.ppl-suggestion-item[data-type='no-results']:hover {
+  background-color: transparent;
+}
+
+/* Ikona v suggestion */
+.ppl-suggestion-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ppl-suggestion-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ppl-suggestion-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ppl-suggestion-main {
+  font-weight: 500;
+  font-size: 14px;
+  color: #004b93;
+}
+
+.ppl-suggestion-secondary {
+  font-size: 12px;
+  color: #505e6c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.ppl-search-input-wrapper {
+  position: relative;
+}
+
+.ppl-suggestion-icon .loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e0e0e0;
+  border-top: 2px solid #004b93;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Zvýraznění search termu */
+.ppl-suggestion-main .search-highlight,
+.ppl-suggestion-secondary .search-highlight {
+  background-color: #fff3cd;
+  font-weight: 600;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+/* === DEBUGGING STYLY (pouze pro development) === */
+.debug-suggestions {
+  border: 2px dashed red !important;
+}
+
+.debug-suggestions .ppl-suggestion-item {
+  border: 1px solid blue !important;
+}
+
+/* === ACCESSIBILITY IMPROVEMENTS === */
+.ppl-suggestion-item:focus {
+  outline: 2px solid #004b93;
+  outline-offset: -2px;
+  background-color: #e6f0ff;
+}
+
+.ppl-suggestion-item[aria-selected='true'] {
+  background-color: #e6f0ff;
+}
+
+/* === SCROLLBAR STYLING === */
+.ppl-search-suggestions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ppl-search-suggestions::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.ppl-search-suggestions::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.ppl-search-suggestions::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+/* Styl pro "Zavřeno" a loading text */
+.opening-hours-day-row .closed-text,
+.opening-hours-day-row .loading-text {
+  width: auto;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 25px;
+  color: #505e6c;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.opening-hours-day-row .loading-text {
+  color: #999;
+  font-style: italic;
+}
+
+/* === KAPACITA STAVŮ === */
+
+/* Základní kontejner kapacity */
+.kapacita {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 10px;
+  gap: 10px;
+  width: auto;
+  height: 33px;
+  border: 1px solid;
+  border-radius: 8px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  transition: all 0.3s ease;
+}
+
+/* Volné */
+.kapacita.capacity-free {
+  background: linear-gradient(
+      0deg,
+      rgba(0, 186, 133, 0.1),
+      rgba(0, 186, 133, 0.1)
+    ),
+    #ffffff;
+  border: 1px solid rgba(0, 186, 133, 0.5);
+}
+
+.kapacita.capacity-free p {
+  color: #017957;
+}
+
+/* Částečně plné */
+.kapacita.capacity-partial {
+  background: linear-gradient(
+      0deg,
+      rgba(239, 109, 27, 0.1),
+      rgba(239, 109, 27, 0.1)
+    ),
+    #ffffff;
+  border: 1px solid rgba(239, 109, 27, 0.5);
+}
+
+.kapacita.capacity-partial p {
+  color: #92400b;
+}
+
+/* Plné */
+.kapacita.capacity-full {
+  background: linear-gradient(0deg, #fdf2f3, #fdf2f3), #ffffff;
+  border: 1px solid #e15059;
+}
+
+.kapacita.capacity-full p {
+  color: #d40511;
+}
+
+/* Nedostupné/Blocked */
+.kapacita.capacity-blocked {
+  background: linear-gradient(0deg, #fdf2f3, #fdf2f3), #ffffff;
+  border: 1px solid #e15059;
+}
+
+.kapacita.capacity-blocked p {
+  color: #d40511;
+}
+
+/* Údržba */
+.kapacita.capacity-maintenance {
+  background: linear-gradient(
+      0deg,
+      rgba(239, 109, 27, 0.1),
+      rgba(239, 109, 27, 0.1)
+    ),
+    #ffffff;
+  border: 1px solid rgba(239, 109, 27, 0.5);
+}
+
+.kapacita.capacity-maintenance p {
+  color: #92400b;
+}
+
+/* Neznámá kapacita */
+.kapacita.capacity-unknown {
+  background: linear-gradient(0deg, #f7f8fa, #f7f8fa), #ffffff;
+  border: 1px solid #c7dbea;
+}
+
+.kapacita.capacity-unknown p {
+  color: #004b93;
+}
+
+/* Loading stav kapacity */
+.kapacita.loading {
+  background: linear-gradient(0deg, #f7f8fa, #f7f8fa), #ffffff;
+  border: 1px solid #c7dbea;
+}
+
+.kapacita.loading p {
+  color: #004b93;
+  font-style: italic;
+}
+
+/* Frame 35 - kontejner pro ikonu a text */
+.kapacita .frame-35 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+  width: auto;
+  height: 25px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Ikona kapacity - DHL Icon/Box1 */
+.dhl-icon-box1 {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.dhl-icon-box1 svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Text kapacity */
+.kapacita p {
+  width: auto;
+  height: 25px;
+  margin: 0;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  transition: color 0.3s ease;
+}
+
+/* === NOVÉ KATEGORIE FILTRŮ === */
+
+/* Kategorie filtr */
+.ppl-filter-category {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  width: 100%;
+  margin-bottom: -10px;
+}
+
+/* Header kategorie */
+.ppl-filter-category-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  gap: 32px;
+  width: 100%;
+  height: 25px;
+  min-height: 30px;
+  cursor: pointer;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.ppl-filter-category-header:hover {
+  background-color: #f8f9fa;
+}
+
+/* Název kategorie */
+.filter-category-title {
+  width: auto;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 25px;
+  text-decoration-line: underline;
+  color: #004b93;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Šipka kategorie */
+.filter-category-arrow {
+  width: 11px;
+  height: 7px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  flex-shrink: 0; /* Zabrání zmenšování šipky */
+  transition: transform 0.2s ease;
+  background-image: url('data:image/svg+xml;utf8,<svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.7043 0.667257C10.5169 0.481006 10.2635 0.376465 9.99929 0.376465C9.73511 0.376465 9.48166 0.481006 9.29429 0.667257L5.70429 4.20726L2.16429 0.667257C1.97693 0.481006 1.72348 0.376465 1.45929 0.376465C1.19511 0.376465 0.941657 0.481006 0.754294 0.667257C0.660566 0.76022 0.586171 0.870821 0.535403 0.992681C0.484634 1.11454 0.458496 1.24525 0.458496 1.37726C0.458496 1.50927 0.484634 1.63997 0.535403 1.76183C0.586171 1.88369 0.660566 1.99429 0.754294 2.08726L4.99429 6.32726C5.08726 6.42099 5.19786 6.49538 5.31972 6.54615C5.44158 6.59692 5.57228 6.62306 5.70429 6.62306C5.83631 6.62306 5.96701 6.59692 6.08887 6.54615C6.21073 6.49538 6.32133 6.42099 6.41429 6.32726L10.7043 2.08726C10.798 1.99429 10.8724 1.88369 10.9232 1.76183C10.974 1.63997 11.0001 1.50927 11.0001 1.37726C11.0001 1.24525 10.974 1.11454 10.9232 0.992681C10.8724 0.870821 10.798 0.76022 10.7043 0.667257Z" fill="%231B1B1B"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.filter-category-arrow.expanded {
+  transform: rotate(180deg);
+}
+/* Obsah kategorie */
+/* .ppl-filter-category-content {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px 24px;
+  gap: 6px;
+  width: 100%;
+  margin-top: 12px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+} */
+
+.ppl-filter-category-content {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px 10px;
+  gap: 5px;
+  width: 100%;
+  height: auto;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.ppl-filter-category-content.expanded {
+  display: flex;
+}
+
+/* Jednotlivá možnost filtru */
+.ppl-filter-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+  width: 100%;
+  height: auto;
+  min-height: 20px;
+  flex: none;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Pořadí řádků */
+.ppl-filter-option:nth-child(1) {
+  order: 0;
+} /* Česko */
+.ppl-filter-option:nth-child(2) {
+  order: 1;
+} /* Slovensko */
+.ppl-filter-option:nth-child(3) {
+  order: 2;
+} /* Německo */
+.ppl-filter-option:nth-child(4) {
+  order: 3;
+} /* Polsko */
+
+/* Checkbox kontejner - zajistí zarovnání a pevnou šířku */
+.ppl-filter-option .checkbox-container {
+  display: flex; /* Důležité pro správné zarovnání ikony */
+  align-items: center; /* Vertikální zarovnání */
+  justify-content: center; /* Horizontální zarovnání */
+  gap: 8px; /* Mezera mezi custom checkboxem a textem, pokud byste ji chtěli zachovat zde */
+  cursor: pointer;
+  width: 25px; /* <--- NOVÁ HODNOTA! Nastaví pevnou šířku kontejneru pro checkbox */
+  height: 22px; /* Výška pro zarovnání s textem, nebo 24px pokud chcete větší čtverec */
+  flex-shrink: 0; /* Zabrání zmenšování kontejneru ikony */
+  position: relative; /* Pro absolutní pozicování custom checkboxu uvnitř */
+  padding-left: 0; /* Odstranit případný padding, který by posouval custom checkbox */
+}
+
+/* Skrytý checkbox */
+.ppl-filter-option input[type='checkbox'] {
+  /* Skryje vizuální checkbox, ale zachová jeho funkčnost */
+  position: absolute; /* Důležité pro překrytí custom-checkboxem */
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+/* Custom checkbox */
+.ppl-filter-option .custom-checkbox {
+  box-sizing: border-box;
+  display: inline-block; /* Zajistí, že se chová jako blokový prvek */
+  width: 22px; /* Změna z 24px na 22px, aby pasovalo na SVG */
+  height: 22px; /* Změna z 24px na 22px */
+  background: #ffffff;
+  border: 1.5px solid #767676;
+  border-radius: 4px;
+  position: relative; /* Pro umístění fajfky */
+  flex-shrink: 0; /* Důležité, aby se checkbox nezmenšoval */
+}
+
+/* Label pro checkbox
+.ppl-filter-option label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  width: 100%;
+} */
+
+/* Label pro celý řádek */
+.ppl-filter-option label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  width: 100%;
+  min-height: 22px;
+  padding: 0px;
+}
+
+/* Custom checkbox */
+.custom-checkbox {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  background: #ffffff;
+  border: 1.5px solid #767676;
+  border-radius: 4px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Zaškrtnutý checkbox */
+.ppl-filter-option input[type='checkbox']:checked + label .custom-checkbox {
+  background: #004b93;
+  border-color: #004b93;
+}
+
+/* Fajfka v zaškrtnutém custom checkboxu */
+.ppl-filter-option
+  input[type='checkbox']:checked
+  + label
+  .custom-checkbox::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%); /* Centruje fajfku */
+  width: 14px; /* Zvětšeno pro lepší viditelnost */
+  height: 10px; /* Zvětšeno pro lepší viditelnost */
+  background: white;
+  /* Použijeme SVG pro fajfku pro ostřejší zobrazení */
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>')
+    no-repeat center / contain;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>')
+    no-repeat center / contain;
+}
+
+/* Label text
+.option-label {
+  width: auto;
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  color: #505E6C;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+} */
+
+/* Texty zemí - základní styl */
+.ppl-filter-option .option-label {
+  height: 25px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+  color: #505e6c;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Specifické šířky pro jednotlivé země */
+.ppl-filter-option .option-label.czechia {
+  width: 45px;
+}
+
+.ppl-filter-option .option-label.slovakia {
+  width: 73px;
+}
+
+.ppl-filter-option .option-label.germany {
+  width: 69px;
+}
+
+.ppl-filter-option .option-label.poland {
+  width: 49px;
+}
+
+/* === MODERNÍ LOADING KOMPONENTA === */
+.ppl-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  min-height: 200px;
+}
+
+.ppl-loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid #e6f0ff;
+  border-top: 4px solid #004b93;
+  border-radius: 50%;
+  animation: ppl-spin 1s linear infinite;
+  margin-bottom: 24px;
+}
+
+@keyframes ppl-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ppl-loading-text {
+  font-family: 'Roboto';
+  font-size: 18px;
+  font-weight: 500;
+  color: #004b93;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.ppl-loading-subtext {
+  font-family: 'Roboto';
+  font-size: 14px;
+  color: #505e6c;
+  opacity: 0.8;
+  animation: ppl-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ppl-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.ppl-loading-progress {
+  width: 200px;
+  height: 4px;
+  background: #e6f0ff;
+  border-radius: 2px;
+  margin: 16px auto 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.ppl-loading-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #004b93, #0066cc);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.ppl-loading-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: ppl-shimmer 1.5s infinite;
+}
+
+@keyframes ppl-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* === GLOBAL LOADING OVERLAY === */
+.ppl-global-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(3px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.ppl-global-loading.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ppl-global-loading-content {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 75, 147, 0.15);
+  padding: 40px;
+  text-align: center;
+  min-width: 320px;
+  transform: translateY(-20px);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.ppl-global-loading.show .ppl-global-loading-content {
+  transform: translateY(0);
+}
+
+.ppl-global-loading-spinner {
+  width: 80px;
+  height: 80px;
+  border: 6px solid #e6f0ff;
+  border-top: 6px solid #004b93;
+  border-radius: 50%;
+  animation: ppl-spin 1s linear infinite;
+  margin: 0 auto 24px;
+}
+
+.ppl-global-loading-title {
+  font-family: 'Roboto';
+  font-size: 20px;
+  font-weight: 600;
+  color: #004b93;
+  margin-bottom: 8px;
+}
+
+.ppl-global-loading-subtitle {
+  font-family: 'Roboto';
+  font-size: 14px;
+  color: #505e6c;
+  margin-bottom: 24px;
+  opacity: 0.9;
+}
+
+.ppl-global-loading-progress {
+  width: 280px;
+  height: 6px;
+  background: #e6f0ff;
+  border-radius: 3px;
+  margin: 0 auto 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ppl-global-loading-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #004b93, #0066cc);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.ppl-global-loading-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  animation: ppl-shimmer 2s infinite;
+}
+
+.ppl-global-loading-percentage {
+  font-family: 'Roboto';
+  font-size: 12px;
+  font-weight: 500;
+  color: #004b93;
+  opacity: 0.8;
+}
+
+.ppl-global-loading-country-flag {
+  width: 32px;
+  height: 24px;
+  border-radius: 4px;
+  margin: 0 auto 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
