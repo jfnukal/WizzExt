@@ -2790,17 +2790,7 @@ class PPLWidget {
       </div>`;
   }
 
-  // async init() {
-  //   this.initMap();
-  //   this.bindEvents();
-  //   this.initSearchFeatures();
-  //   this.initializeCountryFilter();
-  //   setTimeout(() => {
-  //     this.bindZoomControls();
-  //   }, 100);
-
-  //   await this.initGeolocationFlow();
-  // }
+ 
 
         async init() {
         console.log('🔍 INIT START: Widget initialization beginning');
@@ -2880,9 +2870,11 @@ class PPLWidget {
       container.innerHTML = `<div class="ppl-loading" style="padding: 40px 20px;">${promptMessage}</div>`;
     
       // 2. Načteme data POUZE pro mapu (bez vykreslení seznamu)
-      if (this.allAccessPoints.length === 0) {
-        await this.loadAccessPoints();
-      }
+        if (this.allAccessPoints.length === 0) {
+          // Nastav flag PŘED načítáním, aby loadAccessPoints nevykreslilo seznam
+          this.geolocationDenied = true;
+          await this.loadAccessPoints();
+        }
     
       // 3. NESTAVÍME currentAccessPoints! Jen zobrazíme markery
       this.renderMarkers();
@@ -2890,7 +2882,7 @@ class PPLWidget {
       this.hideGlobalLoading();
       
       // 4. ZABRÁNÍME jakémukoli dalšímu vykreslování seznamu
-      this.geolocationDenied = true; // Přidáme flag
+      console.log('🔍 handleGeolocationDenied: DOKONČENO, flag nastaven na true');
     }
   
   bindZoomControls() {
