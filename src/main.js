@@ -1,5 +1,7 @@
-
-import * as L from 'https://cdn.skypack.dev/leaflet';
+// Kontrola dostupnosti Leaflet
+if (typeof L === 'undefined') {
+    console.error('PPL Widget: Leaflet library is required. Please include leaflet.js before this script.');
+}
 
 const logoSVG = `<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 143.4343">
 <defs>
@@ -6761,152 +6763,170 @@ class PPLWidget {
       }, 300);
     }
   }
-
+ }
+ 
+ 
+ // Export pro různá prostředí
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = PPLWidget;
+}
+if (typeof window !== 'undefined') {
+    window.PPLWidget = PPLWidget;
+}
   // === EXAMPLE USAGE ===
 // === KONFIGURACE PRO RŮZNÉ ZEMĚ ===
-const COUNTRY_CONFIGS = {
-  DE: {
-    isLargeDataset: true,
-    mapCenter: [51.1657, 10.4515],
-    mapZoom: 6,
-    initialLanguage: 'DE',
-    cache: {
-      enabled: true,
-      ttl: 60 * 60 * 1000,
-      maxSize: 2000,
-    },
-    viewport: {
-      enabled: true,
-      padding: 0.1,
-      minZoomForViewport: 6,
-    },
-    clustering: {
-      cacheEnabled: true,
-      maxCacheSize: 200,
-      updateThreshold: 0.2,
-    },
-    batchSize: 2000,
-    concurrentRequests: 6,
-    maxRetries: 5,
-    retryDelay: 2000,
-  },
-
-  PL: {
-    isLargeDataset: true,
-    mapCenter: [51.9194, 19.1451],
-    mapZoom: 6,
-    initialLanguage: 'PL',
-    cache: {
-      enabled: true,
-      ttl: 45 * 60 * 1000,
-      maxSize: 1500,
-    },
-    viewport: {
-      enabled: true,
-      padding: 0.15,
-      minZoomForViewport: 7,
-    },
-    clustering: {
-      cacheEnabled: true,
-      maxCacheSize: 150,
-      updateThreshold: 0.25,
-    },
-    batchSize: 1500,
-    concurrentRequests: 5,
-    maxRetries: 4,
-    retryDelay: 1500,
-  },
-
-  CZ: {
-    isLargeDataset: false,
-    mapCenter: [49.7437, 15.3386],
-    mapZoom: 7,
-    initialLanguage: 'CZ',
-    cache: {
-      enabled: true,
-      ttl: 30 * 60 * 1000,
-      maxSize: 500,
-    },
-    viewport: {
-      enabled: true,
-      padding: 0.3,
-      minZoomForViewport: 9,
-    },
-    clustering: {
-      cacheEnabled: true,
-      maxCacheSize: 50,
-      updateThreshold: 0.3,
-    },
-    batchSize: 1000,
-    concurrentRequests: 4,
-    maxRetries: 3,
-    retryDelay: 1000,
-  },
-
-  SK: {
-    isLargeDataset: false,
-    mapCenter: [48.669, 19.699],
-    mapZoom: 7,
-    initialLanguage: 'CZ',
-    cache: {
-      enabled: true,
-      ttl: 30 * 60 * 1000,
-      maxSize: 300,
-    },
-    viewport: {
-      enabled: true,
-      padding: 0.4,
-      minZoomForViewport: 10,
-    },
-    clustering: {
-      cacheEnabled: true,
-      maxCacheSize: 30,
-      updateThreshold: 0.4,
-    },
-    batchSize: 500,
-    concurrentRequests: 3,
-    maxRetries: 3,
-    retryDelay: 1000,
-  },
-};
+        const COUNTRY_CONFIGS = {
+          DE: {
+            isLargeDataset: true,
+            mapCenter: [51.1657, 10.4515],
+            mapZoom: 6,
+            initialLanguage: 'DE',
+            cache: {
+              enabled: true,
+              ttl: 60 * 60 * 1000,
+              maxSize: 2000,
+            },
+            viewport: {
+              enabled: true,
+              padding: 0.1,
+              minZoomForViewport: 6,
+            },
+            clustering: {
+              cacheEnabled: true,
+              maxCacheSize: 200,
+              updateThreshold: 0.2,
+            },
+            batchSize: 2000,
+            concurrentRequests: 6,
+            maxRetries: 5,
+            retryDelay: 2000,
+          },
+        
+          PL: {
+            isLargeDataset: true,
+            mapCenter: [51.9194, 19.1451],
+            mapZoom: 6,
+            initialLanguage: 'PL',
+            cache: {
+              enabled: true,
+              ttl: 45 * 60 * 1000,
+              maxSize: 1500,
+            },
+            viewport: {
+              enabled: true,
+              padding: 0.15,
+              minZoomForViewport: 7,
+            },
+            clustering: {
+              cacheEnabled: true,
+              maxCacheSize: 150,
+              updateThreshold: 0.25,
+            },
+            batchSize: 1500,
+            concurrentRequests: 5,
+            maxRetries: 4,
+            retryDelay: 1500,
+          },
+        
+          CZ: {
+            isLargeDataset: false,
+            mapCenter: [49.7437, 15.3386],
+            mapZoom: 7,
+            initialLanguage: 'CZ',
+            cache: {
+              enabled: true,
+              ttl: 30 * 60 * 1000,
+              maxSize: 500,
+            },
+            viewport: {
+              enabled: true,
+              padding: 0.3,
+              minZoomForViewport: 9,
+            },
+            clustering: {
+              cacheEnabled: true,
+              maxCacheSize: 50,
+              updateThreshold: 0.3,
+            },
+            batchSize: 1000,
+            concurrentRequests: 4,
+            maxRetries: 3,
+            retryDelay: 1000,
+          },
+        
+          SK: {
+            isLargeDataset: false,
+            mapCenter: [48.669, 19.699],
+            mapZoom: 7,
+            initialLanguage: 'CZ',
+            cache: {
+              enabled: true,
+              ttl: 30 * 60 * 1000,
+              maxSize: 300,
+            },
+            viewport: {
+              enabled: true,
+              padding: 0.4,
+              minZoomForViewport: 10,
+            },
+            clustering: {
+              cacheEnabled: true,
+              maxCacheSize: 30,
+              updateThreshold: 0.4,
+            },
+            batchSize: 500,
+            concurrentRequests: 3,
+            maxRetries: 3,
+            retryDelay: 1000,
+          },
+        };
 
 // === UTILITY FUNKCE ===
 
 /**
  * Detekce země z různých zdrojů
  */
+/**
+ * Detekce země z různých zdrojů
+ */
 function detectCountry() {
-  // 1. Priorita: data-country atribut na kontejneru
-  const container = document.getElementById('ppl-parcelshop-map');
-  const dataCountry = container?.dataset.country;
-  if (dataCountry && COUNTRY_CONFIGS[dataCountry.toUpperCase()]) {
-    return dataCountry.toUpperCase();
+  // 1. Priorita: data-country atribut na kontejneru (pouze v browseru)
+  if (typeof document !== 'undefined') {
+    const container = document.getElementById('ppl-parcelshop-map');
+    const dataCountry = container?.dataset.country;
+    if (dataCountry && COUNTRY_CONFIGS[dataCountry.toUpperCase()]) {
+      return dataCountry.toUpperCase();
+    }
   }
 
-  // 2. Priorita: URL parametr
-  const urlParams = new URLSearchParams(window.location.search);
-  const countryParam = urlParams.get('country');
-  if (countryParam && COUNTRY_CONFIGS[countryParam.toUpperCase()]) {
-    return countryParam.toUpperCase();
+  // 2. Priorita: URL parametr (pouze v browseru)
+  if (typeof window !== 'undefined' && window.location) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const countryParam = urlParams.get('country');
+    if (countryParam && COUNTRY_CONFIGS[countryParam.toUpperCase()]) {
+      return countryParam.toUpperCase();
+    }
   }
 
   // 3. Priorita: jazyk prohlížeče
-  const lang = navigator.language || navigator.userLanguage;
-  const languageCountryMap = {
-    de: 'DE',
-    'de-DE': 'DE',
-    'de-AT': 'DE', // Rakousko → DE config
-    cs: 'CZ',
-    'cs-CZ': 'CZ',
-    sk: 'SK',
-    'sk-SK': 'SK',
-    pl: 'PL',
-    'pl-PL': 'PL',
-  };
+  if (typeof navigator !== 'undefined') {
+    const lang = navigator.language || navigator.userLanguage;
+    const languageCountryMap = {
+      de: 'DE',
+      'de-DE': 'DE',
+      'de-AT': 'DE',
+      cs: 'CZ',
+      'cs-CZ': 'CZ',
+      sk: 'SK',
+      'sk-SK': 'SK',
+      pl: 'PL',
+      'pl-PL': 'PL',
+    };
 
-  const detectedCountry = languageCountryMap[lang];
-  if (detectedCountry && COUNTRY_CONFIGS[detectedCountry]) {
-    return detectedCountry;
+    const detectedCountry = languageCountryMap[lang];
+    if (detectedCountry && COUNTRY_CONFIGS[detectedCountry]) {
+      return detectedCountry;
+    }
   }
 
   // 4. Fallback: CZ
@@ -6927,20 +6947,22 @@ function applyCountryOptimizations(container, country) {
     country = 'CZ';
   }
 
-  // Nastav data atributy na kontejner
-  container.dataset.country = country;
+  // Nastav data atributy na kontejner (pouze v browseru)
+  if (container && container.dataset) {
+    container.dataset.country = country;
 
-  // Nastav centrum mapy pokud není specifikováno
-  if (!container.dataset.centerLat && config.mapCenter) {
-    container.dataset.centerLat = config.mapCenter[0];
-    container.dataset.centerLng = config.mapCenter[1];
-    container.dataset.zoom = config.mapZoom;
-  }
+    // Nastav centrum mapy pokud není specifikováno
+    if (!container.dataset.centerLat && config.mapCenter) {
+      container.dataset.centerLat = config.mapCenter[0];
+      container.dataset.centerLng = config.mapCenter[1];
+      container.dataset.zoom = config.mapZoom;
+    }
 
-  if (config.isLargeDataset) {
-    container.dataset.largeDataset = 'true';
-    container.classList.add('large-dataset');
-    console.log(`🔥 Large dataset mode enabled for ${country}`);
+    if (config.isLargeDataset) {
+      container.dataset.largeDataset = 'true';
+      container.classList.add('large-dataset');
+      console.log(`🔥 Large dataset mode enabled for ${country}`);
+    }
   }
 
   return config;
@@ -6980,39 +7002,60 @@ function logCountryConfig(country, config) {
 
 // === HLAVNÍ INICIALIZACE ===
 
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('ppl-parcelshop-map');
-  if (!container) {
-    console.warn('PPL Widget container not found');
-    return;
-  }
+// === HLAVNÍ INICIALIZACE ===
 
-  // 1. Detekuj zemi
-  const country = detectCountry();
-  console.log(`🌍 Detected country: ${country}`);
+// Podmíněná inicializace - pouze v browser prostředí
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('ppl-parcelshop-map');
+    if (!container) {
+      console.warn('PPL Widget container not found');
+      return;
+    }
 
-  // 2. Aplikuj optimalizace
-  const countryConfig = applyCountryOptimizations(container, country);
+    // 1. Detekuj zemi
+    const country = detectCountry();
+    console.log(`🌍 Detected country: ${country}`);
 
- const isDev = false; // nastav na true, pokud chceš vývojový mód
+    // 2. Aplikuj optimalizace
+    const countryConfig = applyCountryOptimizations(container, country);
 
-if (isDev) {
-  console.log('Development mode');
+    const isDev = false; // nastav na true, pokud chceš vývojový mód
+
+    if (isDev) {
+      console.log('Development mode');
+    }
+
+    // 4. Vytvoř widget s country-specific konfigurací
+    const widgetConfig = getWidgetConfig(country);
+    const widget = new PPLWidget(container, widgetConfig);
+
+    // 5. Přidej country info do widget instance
+    widget.country = country;
+    widget.countryConfig = countryConfig;
+
+    // 6. Global reference pro debugging
+    window.pplWidget = widget;
+
+    console.log(`✅ PPL Widget initialized successfully for ${country}`);
+  });
+} else {
+  // Node.js prostředí - pouze export
+  console.log('PPL Widget loaded in Node.js environment - no auto-initialization');
 }
-  // 4. Vytvoř widget s country-specific konfigurací
-  const widgetConfig = getWidgetConfig(country);
-  const widget = new PPLWidget(container, widgetConfig);
-
-  // 5. Přidej country info do widget instance
-  widget.country = country;
-  widget.countryConfig = countryConfig;
-
-  // 6. Global reference pro debugging
-  window.pplWidget = widget;
-
-  console.log(`✅ PPL Widget initialized successfully for ${country}`);
-});
 
 // === EXPORT PRO DALŠÍ POUŽITÍ ===
-window.PPLCountryConfigs = COUNTRY_CONFIGS;
-window.detectPPLCountry = detectCountry;
+if (typeof window !== 'undefined') {
+  window.PPLCountryConfigs = COUNTRY_CONFIGS;
+  window.detectPPLCountry = detectCountry;
+} else {
+  // Node.js export
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      PPLWidget,
+      COUNTRY_CONFIGS,
+      detectCountry
+    };
+  }
+}
+
