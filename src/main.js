@@ -555,6 +555,7 @@ class PPLWidget {
       }, 500);
 
       // KROK B: Aplikuj filtry a zobraz mapu
+      console.log('🔍 loadAccessPoints: Before applyFilters(), geolocationDenied =', this.geolocationDenied);
       this.applyFilters();
 
       // KROK C: Načti detaily pro první batch sidebaru (asynchronně)
@@ -1707,6 +1708,10 @@ class PPLWidget {
    * OPRAVENÁ FUNKCE: Lepší aplikace filtrů s reset možností
    */
   applyFilters() {
+  // DEBUG: Kdo volá applyFilters?
+  console.trace('🔍 applyFilters() was called from:');
+  console.log('🔍 geolocationDenied flag:', this.geolocationDenied);
+  
   if (this.allAccessPoints.length === 0) {
     console.log('applyFilters: Čekám na načtení dat, zatím nic nedělám.');
     return;
@@ -2806,10 +2811,14 @@ class PPLWidget {
       setTimeout(() => {
         this.bindZoomControls();
       }, 100);
+
+       console.log('🔍 INIT: About to start geolocation flow');
     
       // Toto je teď jediná věc, která se na konci startu stane.
       // Počkáme, dokud se celý proces geolokace nedokončí.
       await this.initGeolocationFlow();
+
+      console.log('🔍 INIT END: Widget initialization complete');
     }
 
      initGeolocationFlow() {
@@ -4167,8 +4176,13 @@ class PPLWidget {
   }
 
   renderResults() {
-    const container = this.container.querySelector('.ppl-results');
-    if (!container) return;
+  // DEBUG: Kdo volá renderResults?
+  console.trace('🔍 renderResults() was called from:');
+  console.log('🔍 geolocationDenied flag:', this.geolocationDenied);
+  console.log('🔍 currentAccessPoints length:', this.currentAccessPoints.length);
+  
+  const container = this.container.querySelector('.ppl-results');
+  if (!container) return;
 
     if (this.currentAccessPoints.length === 0) {
       container.innerHTML = `<div class="ppl-loading">${
