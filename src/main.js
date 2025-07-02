@@ -1,109 +1,65 @@
-// === AUTOMATICKÉ NAČÍTÁNÍ LEAFLET ===
+// === AUTOMATICKÉ NAČÍTÁNÍ LEAFLET JS ===
 (function() {
     'use strict';
     
-     // DŮLEŽITÉ: Spusť pouze v browser prostředí
+    // Pouze v browser prostředí
     if (typeof window === 'undefined' || typeof document === 'undefined') {
-        console.log('PPL Widget: Skipping auto-initialization - not in browser environment');
         return;
     }
     
-    // Funkce pro načtení CSS
-    function loadCSS(href) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = href;
-        document.head.appendChild(link);
-    }
-    
-    // Funkce pro načtení JS
-    function loadJS(src) {
-        return new Promise((resolve, reject) => {
+    function initWhenReady() {
+        if (typeof L !== 'undefined') {
+            // Leaflet je už načtený
+            console.log('✅ Leaflet already available');
+            startPPLWidget();
+        } else {
+            // Načti Leaflet JS (CSS už je v CSS souboru)
+            console.log('📦 Loading Leaflet JS...');
             const script = document.createElement('script');
-            script.src = src;
-            script.onload = resolve;
-            script.onerror = reject;
+            script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+            script.onload = () => {
+                console.log('✅ Leaflet JS loaded');
+                startPPLWidget();
+            };
+            script.onerror = () => {
+                console.error('❌ Failed to load Leaflet JS');
+            };
             document.head.appendChild(script);
-        });
+        }
     }
     
-    // Inicializace PPL Widget po načtení Leaflet
-    async function initPPLWidget() {
-        try {
-            // Načti Leaflet CSS
-            loadCSS('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
-            
-            // Načti Leaflet JS
-            await loadJS('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js');
-            
-            console.log('✅ Leaflet loaded successfully');
-            
-            // Nyní je L dostupný, pokračuj s inicializací
+    function startPPLWidget() {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeWidget);
+        } else {
             initializeWidget();
-            
-        } catch (error) {
-            console.error('❌ Failed to load Leaflet:', error);
         }
     }
     
-    // Inicializace widget po načtení Leaflet
     function initializeWidget() {
-        // Zde bude váš původní inicializační kód
-        
-        // === HLAVNÍ INICIALIZACE ===
-        if (typeof document !== 'undefined') {
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', startWidget);
-            } else {
-                startWidget();
-            }
+        const container = document.getElementById('ppl-parcelshop-map');
+        if (!container) {
+            console.warn('PPL Widget container not found');
+            return;
         }
-        
-        function startWidget() {
-            const container = document.getElementById('ppl-parcelshop-map');
-            if (!container) {
-                console.warn('PPL Widget container not found');
-                return;
-            }
 
-            // 1. Detekuj zemi
-            const country = detectCountry();
-            console.log(`🌍 Detected country: ${country}`);
+        const country = detectCountry();
+        console.log(`🌍 Detected country: ${country}`);
 
-            // 2. Aplikuj optimalizace
-            const countryConfig = applyCountryOptimizations(container, country);
+        const countryConfig = applyCountryOptimizations(container, country);
+        const widgetConfig = getWidgetConfig(country);
+        const widget = new PPLWidget(container, widgetConfig);
 
-            const isDev = false;
+        widget.country = country;
+        widget.countryConfig = countryConfig;
+        window.pplWidget = widget;
 
-            if (isDev) {
-                console.log('Development mode');
-            }
-
-            // 4. Vytvoř widget s country-specific konfigurací
-            const widgetConfig = getWidgetConfig(country);
-            const widget = new PPLWidget(container, widgetConfig);
-
-            // 5. Přidej country info do widget instance
-            widget.country = country;
-            widget.countryConfig = countryConfig;
-
-            // 6. Global reference pro debugging
-            window.pplWidget = widget;
-
-            console.log(`✅ PPL Widget initialized successfully for ${country}`);
-        }
+        console.log(`✅ PPL Widget initialized successfully for ${country}`);
     }
     
     // Spusť inicializaci
-    if (typeof L === 'undefined') {
-        // Leaflet není načtený, načti ho
-        initPPLWidget();
-    } else {
-        // Leaflet už je načtený
-        console.log('✅ Leaflet already available');
-        initializeWidget();
-    }
-
+    initWhenReady();
+    
 })();
 
 const logoSVG = `<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 143.4343">
@@ -7091,44 +7047,7 @@ function logCountryConfig(country, config) {
 
 // === HLAVNÍ INICIALIZACE ===
 // Podmíněná inicializace - pouze v browser prostředí
-if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('ppl-parcelshop-map');
-    if (!container) {
-      console.warn('PPL Widget container not found');
-      return;
-    }
 
-    // 1. Detekuj zemi
-    const country = detectCountry();
-    console.log(`🌍 Detected country: ${country}`);
-
-    // 2. Aplikuj optimalizace
-    const countryConfig = applyCountryOptimizations(container, country);
-
-    const isDev = false; // nastav na true, pokud chceš vývojový mód
-
-    if (isDev) {
-      console.log('Development mode');
-    }
-
-    // 4. Vytvoř widget s country-specific konfigurací
-    const widgetConfig = getWidgetConfig(country);
-    const widget = new PPLWidget(container, widgetConfig);
-
-    // 5. Přidej country info do widget instance
-    widget.country = country;
-    widget.countryConfig = countryConfig;
-
-    // 6. Global reference pro debugging
-    window.pplWidget = widget;
-
-    console.log(`✅ PPL Widget initialized successfully for ${country}`);
-  });
-} else {
-  // Node.js prostředí - pouze export
-  console.log('PPL Widget loaded in Node.js environment - no auto-initialization');
-}
 
 // === EXPORT PRO DALŠÍ POUŽITÍ ===
 if (typeof window !== 'undefined') {
