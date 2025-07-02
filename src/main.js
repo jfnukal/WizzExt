@@ -7044,6 +7044,113 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   console.log('PPL Widget loaded in Node.js environment - no auto-initialization');
 }
 
+// === KONFIGURACE PRO RŮZNÉ ZEMĚ ===
+const COUNTRY_CONFIGS = {
+  DE: {
+    isLargeDataset: true,
+    mapCenter: [51.1657, 10.4515],
+    mapZoom: 6,
+    initialLanguage: 'DE',
+    cache: {
+      enabled: true,
+      ttl: 60 * 60 * 1000,
+      maxSize: 2000,
+    },
+    viewport: {
+      enabled: true,
+      padding: 0.1,
+      minZoomForViewport: 6,
+    },
+    clustering: {
+      cacheEnabled: true,
+      maxCacheSize: 200,
+      updateThreshold: 0.2,
+    },
+    batchSize: 2000,
+    concurrentRequests: 6,
+    maxRetries: 5,
+    retryDelay: 2000,
+  },
+
+  PL: {
+    isLargeDataset: true,
+    mapCenter: [51.9194, 19.1451],
+    mapZoom: 6,
+    initialLanguage: 'PL',
+    cache: {
+      enabled: true,
+      ttl: 45 * 60 * 1000,
+      maxSize: 1500,
+    },
+    viewport: {
+      enabled: true,
+      padding: 0.15,
+      minZoomForViewport: 7,
+    },
+    clustering: {
+      cacheEnabled: true,
+      maxCacheSize: 150,
+      updateThreshold: 0.25,
+    },
+    batchSize: 1500,
+    concurrentRequests: 5,
+    maxRetries: 4,
+    retryDelay: 1500,
+  },
+
+  CZ: {
+    isLargeDataset: false,
+    mapCenter: [49.7437, 15.3386],
+    mapZoom: 7,
+    initialLanguage: 'CZ',
+    cache: {
+      enabled: true,
+      ttl: 30 * 60 * 1000,
+      maxSize: 500,
+    },
+    viewport: {
+      enabled: true,
+      padding: 0.3,
+      minZoomForViewport: 9,
+    },
+    clustering: {
+      cacheEnabled: true,
+      maxCacheSize: 50,
+      updateThreshold: 0.3,
+    },
+    batchSize: 1000,
+    concurrentRequests: 4,
+    maxRetries: 3,
+    retryDelay: 1000,
+  },
+
+  SK: {
+    isLargeDataset: false,
+    mapCenter: [48.669, 19.699],
+    mapZoom: 7,
+    initialLanguage: 'CZ',
+    cache: {
+      enabled: true,
+      ttl: 30 * 60 * 1000,
+      maxSize: 300,
+    },
+    viewport: {
+      enabled: true,
+      padding: 0.4,
+      minZoomForViewport: 10,
+    },
+    clustering: {
+      cacheEnabled: true,
+      maxCacheSize: 30,
+      updateThreshold: 0.4,
+    },
+    batchSize: 500,
+    concurrentRequests: 3,
+    maxRetries: 3,
+    retryDelay: 1000,
+  },
+};
+
 // === EXPORT PRO DALŠÍ POUŽITÍ ===
 if (typeof window !== 'undefined') {
   window.PPLCountryConfigs = COUNTRY_CONFIGS;
