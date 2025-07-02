@@ -7039,14 +7039,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Aplikuj optimalizace
   const countryConfig = applyCountryOptimizations(container, country);
 
-  // 3. Log konfigurace (pouze v development)
-  if (
-    process.env.NODE_ENV === 'development' ||
-    window.location.hostname === 'localhost'
-  ) {
-    logCountryConfig(country, countryConfig);
-  }
-
+ 
   // 4. Vytvoř widget s country-specific konfigurací
   const widgetConfig = getWidgetConfig(country);
   const widget = new PPLWidget(container, widgetConfig);
