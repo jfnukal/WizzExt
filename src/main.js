@@ -2802,24 +2802,26 @@ class PPLWidget {
   //   await this.initGeolocationFlow();
   // }
 
-   async init() {
-      // Základní nastavení komponent (mapa, eventy...)
-      this.initMap();
-      this.bindEvents();
-      this.initSearchFeatures();
-      this.initializeCountryFilter();
-      setTimeout(() => {
-        this.bindZoomControls();
-      }, 100);
-
-       console.log('🔍 INIT: About to start geolocation flow');
-    
-      // Toto je teď jediná věc, která se na konci startu stane.
-      // Počkáme, dokud se celý proces geolokace nedokončí.
-      await this.initGeolocationFlow();
-
-      console.log('🔍 INIT END: Widget initialization complete');
-    }
+        async init() {
+        console.log('🔍 INIT START: Widget initialization beginning');
+        
+        // Základní nastavení komponent (mapa, eventy...)
+        this.initMap();
+        this.bindEvents();
+        this.initSearchFeatures();
+        this.initializeCountryFilter();
+        setTimeout(() => {
+          this.bindZoomControls();
+        }, 100);
+      
+        console.log('🔍 INIT: About to start geolocation flow');
+        
+        // Toto je teď jediná věc, která se na konci startu stane.
+        // Počkáme, dokud se celý proces geolokace nedokončí.
+        await this.initGeolocationFlow();
+        
+        console.log('🔍 INIT END: Widget initialization complete');
+      }
 
      initGeolocationFlow() {
       // Vracíme Promise, abychom mohli v init() použít await a počkat na výsledek
