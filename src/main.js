@@ -217,6 +217,8 @@ class PPLWidget {
     this.currentSidebarPoints = []; // Aktuálně zobrazené body v sidebaru
     this.loadingDetails = new Set(); // ID bodů, které se právě načítají
 
+    this.geolocationDenied = false;
+
     // Optimalizace state
     this.lastViewport = null;
     this.lastZoom = null;
@@ -1705,11 +1707,18 @@ class PPLWidget {
    * OPRAVENÁ FUNKCE: Lepší aplikace filtrů s reset možností
    */
   applyFilters() {
-    if (this.allAccessPoints.length === 0) {
-      console.log('applyFilters: Čekám na načtení dat, zatím nic nedělám.');
-      return;
-    }
-    this.clearCache('viewport');
+  if (this.allAccessPoints.length === 0) {
+    console.log('applyFilters: Čekám na načtení dat, zatím nic nedělám.');
+    return;
+  }
+  
+  // NOVÁ KONTROLA: Pokud byla geolokace zamítnuta, neaplikuj filtry
+  if (this.geolocationDenied) {
+    console.log('applyFilters: Geolokace byla zamítnuta, neaplikuji filtry.');
+    return;
+  }
+  
+  this.clearCache('viewport');
 
     const searchTerm = this.container
       .querySelector('.ppl-search-input')
@@ -2788,86 +2797,91 @@ class PPLWidget {
   //   await this.initGeolocationFlow();
   // }
 
-  async init() {
-    // Základní nastavení komponent (mapa, eventy...)
-    this.initMap();
-    this.bindEvents();
-    this.initSearchFeatures();
-    this.initializeCountryFilter();
-    setTimeout(() => {
-      this.bindZoomControls();
-    }, 100);
-
-    // Toto je teď jediná věc, která se na konci startu stane.
-    // Počkáme, dokud se celý proces geolokace nedokončí.
-    await this.initGeolocationFlow();
-  }
-
-  initGeolocationFlow() {
-    // Vracíme Promise, abychom mohli v init() použít await a počkat na výsledek
-    return new Promise((resolve) => {
-      if (!navigator.geolocation) {
-        console.log('Geolokace není podporována.');
-        this.handleGeolocationDenied().then(resolve);
-        return;
-      }
-
-      console.log('Žádám o polohu...');
-      navigator.geolocation.getCurrentPosition(
-        // Callback pro ÚSPĚCH (uživatel povolil)
-        (position) => this.handleGeolocationAllowed(position).then(resolve),
-        // Callback pro CHYBU (uživatel zamítnul)
-        () => this.handleGeolocationDenied().then(resolve),
-        { timeout: 10000 } // Timeout pro případ, že by to trvalo moc dlouho
-      );
-    });
-  }
-
-  async handleGeolocationAllowed(position) {
-    console.log('Poloha získána:', position.coords);
-    const { latitude, longitude } = position.coords;
-
-    const container = this.container.querySelector('.ppl-results');
-    if (container) {
-      container.innerHTML = `<div class="ppl-loading">Vyhledávám nejbližší místa...</div>`;
+   async init() {
+      // Základní nastavení komponent (mapa, eventy...)
+      this.initMap();
+      this.bindEvents();
+      this.initSearchFeatures();
+      this.initializeCountryFilter();
+      setTimeout(() => {
+        this.bindZoomControls();
+      }, 100);
+    
+      // Toto je teď jediná věc, která se na konci startu stane.
+      // Počkáme, dokud se celý proces geolokace nedokončí.
+      await this.initGeolocationFlow();
     }
 
-    // Načteme všechna data z API
-    await this.loadAccessPoints();
-
-    if (this.allAccessPoints.length > 0) {
-      const nearbyPoints = this.findNearbyAccessPoints(latitude, longitude, 15);
-
-      if (nearbyPoints.length > 0) {
-        console.log(`Nalezeno ${nearbyPoints.length} blízkých bodů.`);
-        this.currentAccessPoints = nearbyPoints;
-        this.renderAll(); // Vykreslíme jen blízké body
-        this.map.setView([latitude, longitude], 12);
-      } else {
-        await this.handleGeolocationDenied();
-      }
+     initGeolocationFlow() {
+      // Vracíme Promise, abychom mohli v init() použít await a počkat na výsledek
+      return new Promise((resolve) => {
+        if (!navigator.geolocation) {
+          console.log('Geolokace není podporována.');
+          this.handleGeolocationDenied().then(resolve);
+          return;
+        }
+    
+        console.log('Žádám o polohu...');
+        navigator.geolocation.getCurrentPosition(
+          // Callback pro ÚSPĚCH (uživatel povolil)
+          (position) => this.handleGeolocationAllowed(position).then(resolve),
+          // Callback pro CHYBU (uživatel zamítnul)
+          () => this.handleGeolocationDenied().then(resolve),
+          { timeout: 10000 } // Timeout pro případ, že by to trvalo moc dlouho
+        );
+      });
     }
-  }
 
-  async handleGeolocationDenied() {
-    console.log('Geolokace zamítnuta nebo se nezdařila.');
-    const container = this.container.querySelector('.ppl-results');
-    if (!container) return;
-
-    const promptMessage =
-      this.translations[this.currentLanguage].geolocationPrompt;
-    container.innerHTML = `<div class="ppl-loading" style="padding: 40px 20px;">${promptMessage}</div>`;
-
-    if (this.allAccessPoints.length === 0) {
+      async handleGeolocationAllowed(position) {
+      console.log('Poloha získána:', position.coords);
+      const { latitude, longitude } = position.coords;
+    
+      const container = this.container.querySelector('.ppl-results');
+      if (container) {
+        container.innerHTML = `<div class="ppl-loading">Vyhledávám nejbližší místa...</div>`;
+      }
+    
+      // Načteme všechna data z API
       await this.loadAccessPoints();
+    
+      if (this.allAccessPoints.length > 0) {
+        const nearbyPoints = this.findNearbyAccessPoints(latitude, longitude, 15);
+    
+        if (nearbyPoints.length > 0) {
+          console.log(`Nalezeno ${nearbyPoints.length} blízkých bodů.`);
+          this.currentAccessPoints = nearbyPoints;
+          this.renderAll(); // Vykreslíme jen blízké body
+          this.map.setView([latitude, longitude], 12);
+        } else {
+          await this.handleGeolocationDenied();
+        }
+      }
     }
 
-    this.currentAccessPoints = this.allAccessPoints;
-    this.renderMarkers();
-    this.fitMapToPoints();
-    this.hideGlobalLoading();
-  }
-
+      async handleGeolocationDenied() {
+      console.log('Geolokace zamítnuta nebo se nezdařila.');
+      const container = this.container.querySelector('.ppl-results');
+      if (!container) return;
+    
+      // 1. Zobrazíme v levém panelu výzvu a KONČÍME!
+      const promptMessage =
+        this.translations[this.currentLanguage].geolocationPrompt;
+      container.innerHTML = `<div class="ppl-loading" style="padding: 40px 20px;">${promptMessage}</div>`;
+    
+      // 2. Načteme data POUZE pro mapu (bez vykreslení seznamu)
+      if (this.allAccessPoints.length === 0) {
+        await this.loadAccessPoints();
+      }
+    
+      // 3. NESTAVÍME currentAccessPoints! Jen zobrazíme markery
+      this.renderMarkers();
+      this.fitMapToPoints();
+      this.hideGlobalLoading();
+      
+      // 4. ZABRÁNÍME jakémukoli dalšímu vykreslování seznamu
+      this.geolocationDenied = true; // Přidáme flag
+    }
+  
   bindZoomControls() {
     try {
       console.log('Binding zoom controls...');
