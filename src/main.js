@@ -7039,7 +7039,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Aplikuj optimalizace
   const countryConfig = applyCountryOptimizations(container, country);
 
- 
+ const isDev = false; // nastav na true, pokud chceš vývojový mód
+
+if (isDev) {
+  console.log('Development mode');
+}
   // 4. Vytvoř widget s country-specific konfigurací
   const widgetConfig = getWidgetConfig(country);
   const widget = new PPLWidget(container, widgetConfig);
