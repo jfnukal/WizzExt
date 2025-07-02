@@ -1,5 +1,5 @@
 /* mobile.css */
-@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'); */
+@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
 
 /* Styly pro tablety a menší desktopy */
 @media (max-width: 768px) {
