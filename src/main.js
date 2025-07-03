@@ -62,6 +62,8 @@
     
 })();
 
+//import * as L from 'https://cdn.skypack.dev/leaflet';
+
 const logoSVG = `<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 143.4343">
 <defs>
 <style>.cls-1,.cls-2{fill:#004b93;}.cls-3{fill:#fc0;}.cls-4{fill:#d40511;}.cls-4,.cls-2{fill-rule:evenodd;}</style>
@@ -615,16 +617,8 @@ class PPLWidget {
         this.hideGlobalLoading();
       }, 500);
 
-      // KROK B: Aplikuj filtry a zobraz mapu POUZE pokud nebyla geolokace zamítnuta
-            console.log('🔍 loadAccessPoints: Before applyFilters(), geolocationDenied =', this.geolocationDenied);
-            
-            if (!this.geolocationDenied) {
-              this.applyFilters();
-            } else {
-              console.log('🔍 loadAccessPoints: Geolokace zamítnuta, přeskakuji applyFilters()');
-              // Pouze zobrazíme markery na mapě, žádný seznam
-              this.renderMarkers();
-            }
+      // KROK B: Aplikuj filtry a zobraz mapu
+      this.applyFilters();
 
       // KROK C: Načti detaily pro první batch sidebaru (asynchronně)
       setTimeout(() => {
@@ -1776,10 +1770,6 @@ class PPLWidget {
    * OPRAVENÁ FUNKCE: Lepší aplikace filtrů s reset možností
    */
   applyFilters() {
-  // DEBUG: Kdo volá applyFilters?
-  console.trace('🔍 applyFilters() was called from:');
-  console.log('🔍 geolocationDenied flag:', this.geolocationDenied);
-  
   if (this.allAccessPoints.length === 0) {
     console.log('applyFilters: Čekám na načtení dat, zatím nic nedělám.');
     return;
@@ -2858,30 +2848,34 @@ class PPLWidget {
       </div>`;
   }
 
- 
+  // async init() {
+  //   this.initMap();
+  //   this.bindEvents();
+  //   this.initSearchFeatures();
+  //   this.initializeCountryFilter();
+  //   setTimeout(() => {
+  //     this.bindZoomControls();
+  //   }, 100);
 
-        async init() {
-        console.log('🔍 INIT START: Widget initialization beginning');
-        
-        // Základní nastavení komponent (mapa, eventy...)
-        this.initMap();
-        this.bindEvents();
-        this.initSearchFeatures();
-        this.initializeCountryFilter();
-        setTimeout(() => {
-          this.bindZoomControls();
-        }, 100);
-      
-        console.log('🔍 INIT: About to start geolocation flow');
-        
-        // Toto je teď jediná věc, která se na konci startu stane.
-        // Počkáme, dokud se celý proces geolokace nedokončí.
-        await this.initGeolocationFlow();
-        
-        console.log('🔍 INIT END: Widget initialization complete');
-      }
+  //   await this.initGeolocationFlow();
+  // }
 
-      initGeolocationFlow() {
+   async init() {
+      // Základní nastavení komponent (mapa, eventy...)
+      this.initMap();
+      this.bindEvents();
+      this.initSearchFeatures();
+      this.initializeCountryFilter();
+      setTimeout(() => {
+        this.bindZoomControls();
+      }, 100);
+    
+      // Toto je teď jediná věc, která se na konci startu stane.
+      // Počkáme, dokud se celý proces geolokace nedokončí.
+      await this.initGeolocationFlow();
+    }
+
+     initGeolocationFlow() {
       // Vracíme Promise, abychom mohli v init() použít await a počkat na výsledek
       return new Promise((resolve) => {
         if (!navigator.geolocation) {
@@ -2901,7 +2895,7 @@ class PPLWidget {
       });
     }
 
-    async handleGeolocationAllowed(position) {
+      async handleGeolocationAllowed(position) {
       console.log('Poloha získána:', position.coords);
       const { latitude, longitude } = position.coords;
     
@@ -2927,32 +2921,29 @@ class PPLWidget {
       }
     }
 
-  async handleGeolocationDenied() {
-  console.log('Geolokace zamítnuta nebo se nezdařila.');
-  const container = this.container.querySelector('.ppl-results');
-  if (!container) return;
-
-  // 1. NASTAV FLAG PŘED vším ostatním
-  this.geolocationDenied = true;
-  
-  // 2. Zobrazíme v levém panelu výzvu a KONČÍME!
-  const promptMessage = this.translations[this.currentLanguage].geolocationPrompt;
-  container.innerHTML = `<div class="ppl-loading" style="padding: 40px 20px;">${promptMessage}</div>`;
-
-  // 3. Načteme data POUZE pro mapu (bez vykreslení seznamu)
-  if (this.allAccessPoints.length === 0) {
-    console.log('🔍 Loading data only for map (no sidebar)');
-    await this.loadAccessPoints();
-  }
-
-  // 4. Zobrazíme markery na mapě
-  this.renderMarkers();
-  this.fitMapToPoints();
-  this.hideGlobalLoading();
-  
-  // 5. ZABLOKUJEME jakékoli další vykreslování seznamu
-  console.log('🔍 handleGeolocationDenied: DOKONČENO, flag nastaven na true');
-}
+      async handleGeolocationDenied() {
+      console.log('Geolokace zamítnuta nebo se nezdařila.');
+      const container = this.container.querySelector('.ppl-results');
+      if (!container) return;
+    
+      // 1. Zobrazíme v levém panelu výzvu a KONČÍME!
+      const promptMessage =
+        this.translations[this.currentLanguage].geolocationPrompt;
+      container.innerHTML = `<div class="ppl-loading" style="padding: 40px 20px;">${promptMessage}</div>`;
+    
+      // 2. Načteme data POUZE pro mapu (bez vykreslení seznamu)
+      if (this.allAccessPoints.length === 0) {
+        await this.loadAccessPoints();
+      }
+    
+      // 3. NESTAVÍME currentAccessPoints! Jen zobrazíme markery
+      this.renderMarkers();
+      this.fitMapToPoints();
+      this.hideGlobalLoading();
+      
+      // 4. ZABRÁNÍME jakémukoli dalšímu vykreslování seznamu
+      this.geolocationDenied = true; // Přidáme flag
+    }
   
   bindZoomControls() {
     try {
@@ -4239,18 +4230,8 @@ class PPLWidget {
   }
 
   renderResults() {
-  // DEBUG: Kdo volá renderResults?
-
-      if (this.geolocationDenied) {
-    console.log('🔍 renderResults: Geolokace zamítnuta, přeskakuji vykreslení seznamu');
-    return;
-      }
-  console.trace('🔍 renderResults() was called from:');
-  console.log('🔍 geolocationDenied flag:', this.geolocationDenied);
-  console.log('🔍 currentAccessPoints length:', this.currentAccessPoints.length);
-  
-  const container = this.container.querySelector('.ppl-results');
-  if (!container) return;
+    const container = this.container.querySelector('.ppl-results');
+    if (!container) return;
 
     if (this.currentAccessPoints.length === 0) {
       container.innerHTML = `<div class="ppl-loading">${
@@ -5643,7 +5624,151 @@ class PPLWidget {
     }, 100);
   }
 
-   renderAll() {
+  // applyFilters() {
+  //   // Vymaž viewport cache při změně filtrů
+  //   this.clearCache('viewport');
+
+  //   const searchTerm = this.container
+  //     .querySelector('.ppl-search-input')
+  //     .value.toLowerCase()
+  //     .trim();
+  //   let filtered = [...this.allAccessPoints];
+
+  //   // Filtruj podle typu - aplikuj filtr vždy když nejsou vybrané všechny typy
+  //   if (this.selectedTypes.size > 0 && this.selectedTypes.size < 2) {
+  //     filtered = filtered.filter((p) => this.selectedTypes.has(p.type));
+  //   }
+
+  //   // Filtruj podle platby - aplikuj filtr vždy když nejsou vybrané všechny platby
+  //   if (this.selectedPayments.size > 0 && this.selectedPayments.size < 2) {
+  //     filtered = filtered.filter((p) => {
+  //       if (
+  //         this.selectedPayments.has('card') &&
+  //         !this.selectedPayments.has('cash')
+  //       ) {
+  //         return p.activeCardPayment || p.canPayByCard;
+  //       }
+  //       if (
+  //         this.selectedPayments.has('cash') &&
+  //         !this.selectedPayments.has('card')
+  //       ) {
+  //         return p.activeCashPayment;
+  //       }
+  //       return true;
+  //     });
+  //   }
+
+  //   // Filtr pro víkendový provoz
+  //   if (
+  //     this.activeFilters.has('weekend') ||
+  //     this.activeFilters.has('openOnWeekend')
+  //   ) {
+  //     const beforeCount = filtered.length;
+  //     filtered = filtered.filter((p) => this.checkWeekendOperation(p));
+  //     const afterCount = filtered.length;
+  //     console.log(
+  //       `Weekend filter applied: ${beforeCount} → ${afterCount} points`
+  //     );
+  //   }
+
+  //   // Filtr pro otevřená výdejní místa
+  //   if (this.activeFilters.has('open')) {
+  //     const beforeCount = filtered.length;
+  //     filtered = filtered.filter((p) => this.checkCurrentlyOpen(p));
+  //     const afterCount = filtered.length;
+  //     console.log(`Open filter applied: ${beforeCount} → ${afterCount} points`);
+  //   }
+
+  //   // Filtr pro volná výdejní místa (kapacita)
+  //   if (this.activeFilters.has('capacity')) {
+  //     console.log('🔋 CAPACITY FILTER ACTIVATED');
+  //     console.log('🔋 Active filters:', Array.from(this.activeFilters));
+
+  //     const beforeCount = filtered.length;
+  //     console.log(`🔋 Points before capacity filter: ${beforeCount}`);
+
+  //     // Debug: Ukážeme prvních 5 bodů a jejich kapacitu
+  //     filtered.slice(0, 5).forEach((point, index) => {
+  //       console.log(`🔋 Point ${index + 1}: ${point.name}`);
+  //       console.log(`   - Type: ${point.type}`);
+  //       console.log(`   - CapacityStatus: ${point.capacityStatus || 'NONE'}`);
+  //       console.log(
+  //         `   - CapacityInfo: ${
+  //           point.capacityInfo ? point.capacityInfo.text : 'NONE'
+  //         }`
+  //       );
+  //       console.log(`   - DetailsLoaded: ${point.detailsLoaded}`);
+  //     });
+
+  //     filtered = filtered.filter((p) => this.checkFreeCapacity(p));
+  //     const afterCount = filtered.length;
+
+  //     console.log(
+  //       `🔋 Capacity filter applied: ${beforeCount} → ${afterCount} points`
+  //     );
+
+  //     if (afterCount === 0) {
+  //       console.warn('🔋 WARNING: No points passed capacity filter!');
+  //     }
+  //   }
+
+  //   // Filtry pro otevírací dobu
+  //   if (this.activeFilters.has('before9am')) {
+  //     filtered = filtered.filter((p) => this.checkOpensBefore(p, 9 * 60)); // 9:00 v minutách
+  //   }
+
+  //   if (this.activeFilters.has('after5pm')) {
+  //     filtered = filtered.filter((p) => this.checkClosesAfter(p, 17 * 60)); // 17:00 v minutách
+  //   }
+
+  //   if (this.activeFilters.has('saturday')) {
+  //     filtered = filtered.filter((p) => this.checkOpenOnDay(p, 7)); // 7 pro sobotu (API formát)
+  //   }
+
+  //   if (this.activeFilters.has('sunday')) {
+  //     filtered = filtered.filter((p) => this.checkOpenOnDay(p, 1)); // 1 pro neděli (API formát)
+  //   }
+
+  //   // Filtr pro podání zásilky
+  //   if (this.activeFilters.has('pickup')) {
+  //     const beforeCount = filtered.length;
+  //     filtered = filtered.filter((p) => this.checkPickupEnabled(p));
+  //     const afterCount = filtered.length;
+  //     console.log(
+  //       `Pickup filter applied: ${beforeCount} → ${afterCount} points`
+  //     );
+  //   }
+
+  //   if (this.activeFilters.has('cardPayment')) {
+  //     filtered = filtered.filter((p) => p.canPayByCard);
+  //   }
+
+  //   if (searchTerm) {
+  //     filtered = filtered.filter(
+  //       (p) =>
+  //         (p.name && p.name.toLowerCase().includes(searchTerm)) ||
+  //         (p.city && p.city.toLowerCase().includes(searchTerm))
+  //     );
+  //   }
+
+  //   console.log(
+  //     `Filter applied: ${this.allAccessPoints.length} → ${filtered.length} points`
+  //   );
+  //   console.log('Selected types:', Array.from(this.selectedTypes));
+  //   console.log('Selected payments:', Array.from(this.selectedPayments));
+
+  //   this.currentAccessPoints = filtered;
+  //   this.renderAll();
+
+  //   // PŘIDÁNO: Načti detaily pro nově filtrované body
+  //   if (this.previewDataLoaded) {
+  //     setTimeout(() => {
+  //       this.loadDetailsForSidebar();
+  //     }, 100);
+  //   }
+  // }
+
+  renderAll() {
     this.renderResults();
     this.lastViewport = null;
     this.renderMarkers();
@@ -6685,18 +6810,81 @@ class PPLWidget {
       }, 300);
     }
   }
- }
- 
- 
- // Export pro různá prostředí
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = PPLWidget;
-}
-if (typeof window !== 'undefined') {
-    window.PPLWidget = PPLWidget;
-}
- // === UTILITY FUNKCE ===
 
+  /**
+   * Spustí logiku pro zjištění polohy a následné načtení dat.
+   */
+  // initGeolocationFlow() {
+  //   // Vracíme Promise, abychom mohli v init() použít await a počkat na výsledek
+  //   return new Promise((resolve) => {
+  //     if (!navigator.geolocation) {
+  //       console.log('Geolokace není podporována.');
+  //       this.handleGeolocationDenied().then(resolve);
+  //       return;
+  //     }
+
+  //     console.log('Žádám o polohu...');
+  //     navigator.geolocation.getCurrentPosition(
+  //       // Callback pro ÚSPĚCH (uživatel povolil)
+  //       (position) => this.handleGeolocationAllowed(position).then(resolve),
+  //       // Callback pro CHYBU (uživatel zamítnul)
+  //       () => this.handleGeolocationDenied().then(resolve),
+  //       { timeout: 10000 } // Timeout pro případ, že by to trvalo moc dlouho
+  //     );
+  //   });
+  // }
+
+  async handleGeolocationAllowed(position) {
+    console.log('Poloha získána:', position.coords);
+    const { latitude, longitude } = position.coords;
+
+    const container = this.container.querySelector('.ppl-results');
+    if (container) {
+      container.innerHTML = `<div class="ppl-loading">Vyhledávám nejbližší místa...</div>`;
+    }
+
+    // Načteme všechna data z API
+    await this.loadAccessPoints();
+
+    if (this.allAccessPoints.length > 0) {
+      // Najdeme blízké body
+      const nearbyPoints = this.findNearbyAccessPoints(latitude, longitude, 15); // Změněno na 15 km
+
+      if (nearbyPoints.length > 0) {
+        console.log(`Nalezeno ${nearbyPoints.length} blízkých bodů.`);
+        this.currentAccessPoints = nearbyPoints; // Nastavíme je jako AKTUÁLNÍ
+        this.renderAll(); // Vykreslíme TENTO ZÚŽENÝ VÝBĚR
+        this.map.setView([latitude, longitude], 12);
+      } else {
+        await this.handleGeolocationDenied(); // Pokud nic nenajdeme, chováme se jako při zamítnutí
+      }
+    }
+  }
+
+  async handleGeolocationDenied() {
+    console.log('Geolokace zamítnuta nebo se nezdařila.');
+    const container = this.container.querySelector('.ppl-results');
+    if (!container) return;
+
+    // 1. Zobrazíme v levém panelu výzvu
+    const promptMessage =
+      this.translations[this.currentLanguage].geolocationPrompt;
+    container.innerHTML = `<div class="ppl-loading" style="padding: 40px 20px;">${promptMessage}</div>`;
+
+    // 2. Načteme data pro mapu
+    if (this.allAccessPoints.length === 0) {
+      await this.loadAccessPoints();
+    }
+
+    // 3. Vykreslíme POUZE markery na mapě, levý panel zůstane s výzvou
+    this.currentAccessPoints = this.allAccessPoints;
+    this.renderMarkers();
+    this.fitMapToPoints();
+    this.hideGlobalLoading();
+  }
+}
+
+// === EXAMPLE USAGE ===
 // === KONFIGURACE PRO RŮZNÉ ZEMĚ ===
 const COUNTRY_CONFIGS = {
   DE: {
@@ -6804,53 +6992,52 @@ const COUNTRY_CONFIGS = {
   },
 };
 
+// === UTILITY FUNKCE ===
+
 /**
  * Detekce země z různých zdrojů
  */
 function detectCountry() {
-  // 1. Priorita: data-country atribut na kontejneru (pouze v browseru)
-  if (typeof document !== 'undefined') {
-    const container = document.getElementById('ppl-parcelshop-map');
-    const dataCountry = container?.dataset.country;
-    if (dataCountry && COUNTRY_CONFIGS[dataCountry.toUpperCase()]) {
-      return dataCountry.toUpperCase();
-    }
+  // 1. Priorita: data-country atribut na kontejneru
+  const container = document.getElementById('ppl-parcelshop-map');
+  const dataCountry = container?.dataset.country;
+  if (dataCountry && COUNTRY_CONFIGS[dataCountry.toUpperCase()]) {
+    return dataCountry.toUpperCase();
   }
 
-  // 2. Priorita: URL parametr (pouze v browseru)
-  if (typeof window !== 'undefined' && window.location) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const countryParam = urlParams.get('country');
-    if (countryParam && COUNTRY_CONFIGS[countryParam.toUpperCase()]) {
-      return countryParam.toUpperCase();
-    }
+  // 2. Priorita: URL parametr
+  const urlParams = new URLSearchParams(window.location.search);
+  const countryParam = urlParams.get('country');
+  if (countryParam && COUNTRY_CONFIGS[countryParam.toUpperCase()]) {
+    return countryParam.toUpperCase();
   }
 
   // 3. Priorita: jazyk prohlížeče
-  if (typeof navigator !== 'undefined') {
-    const lang = navigator.language || navigator.userLanguage;
-    const languageCountryMap = {
-      de: 'DE',
-      'de-DE': 'DE',
-      'de-AT': 'DE',
-      cs: 'CZ',
-      'cs-CZ': 'CZ',
-      sk: 'SK',
-      'sk-SK': 'SK',
-      pl: 'PL',
-      'pl-PL': 'PL',
-    };
+  const lang = navigator.language || navigator.userLanguage;
+  const languageCountryMap = {
+    de: 'DE',
+    'de-DE': 'DE',
+    'de-AT': 'DE', // Rakousko → DE config
+    cs: 'CZ',
+    'cs-CZ': 'CZ',
+    sk: 'SK',
+    'sk-SK': 'SK',
+    pl: 'PL',
+    'pl-PL': 'PL',
+  };
 
-    const detectedCountry = languageCountryMap[lang];
-    if (detectedCountry && COUNTRY_CONFIGS[detectedCountry]) {
-      return detectedCountry;
-    }
+  const detectedCountry = languageCountryMap[lang];
+  if (detectedCountry && COUNTRY_CONFIGS[detectedCountry]) {
+    return detectedCountry;
   }
 
   // 4. Fallback: CZ
   return 'CZ';
 }
 
+/**
+ * Aplikuje konfiguraci pro danou zemi
+ */
 function applyCountryOptimizations(container, country) {
   let config = COUNTRY_CONFIGS[country];
 
@@ -6862,30 +7049,35 @@ function applyCountryOptimizations(container, country) {
     country = 'CZ';
   }
 
-  // Nastav data atributy na kontejner (pouze v browseru)
-  if (container && container.dataset) {
-    container.dataset.country = country;
+  // Nastav data atributy na kontejner
+  container.dataset.country = country;
 
-    // Nastav centrum mapy pokud není specifikováno
-    if (!container.dataset.centerLat && config.mapCenter) {
-      container.dataset.centerLat = config.mapCenter[0];
-      container.dataset.centerLng = config.mapCenter[1];
-      container.dataset.zoom = config.mapZoom;
-    }
+  // Nastav centrum mapy pokud není specifikováno
+  if (!container.dataset.centerLat && config.mapCenter) {
+    container.dataset.centerLat = config.mapCenter[0];
+    container.dataset.centerLng = config.mapCenter[1];
+    container.dataset.zoom = config.mapZoom;
+  }
 
-    if (config.isLargeDataset) {
-      container.dataset.largeDataset = 'true';
-      container.classList.add('large-dataset');
-      console.log(`🔥 Large dataset mode enabled for ${country}`);
-    }
+  if (config.isLargeDataset) {
+    container.dataset.largeDataset = 'true';
+    container.classList.add('large-dataset');
+    console.log(`🔥 Large dataset mode enabled for ${country}`);
   }
 
   return config;
 }
+console.log('🌍 Multi-country support implemented successfully!');
 
+/**
+ * Získá optimalizovanou konfiguraci pro widget
+ */
 function getWidgetConfig(country) {
   const countryConfig = COUNTRY_CONFIGS[country] || COUNTRY_CONFIGS.CZ;
+
+  // Odstranění isLargeDataset z config (není to widget parametr)
   const { isLargeDataset, ...widgetConfig } = countryConfig;
+
   return widgetConfig;
 }
 
@@ -6909,21 +7101,40 @@ function logCountryConfig(country, config) {
 }
 
 // === HLAVNÍ INICIALIZACE ===
-// Podmíněná inicializace - pouze v browser prostředí
 
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('ppl-parcelshop-map');
+  if (!container) {
+    console.warn('PPL Widget container not found');
+    return;
+  }
+
+  // 1. Detekuj zemi
+  const country = detectCountry();
+  console.log(`🌍 Detected country: ${country}`);
+
+  // 2. Aplikuj optimalizace
+  const countryConfig = applyCountryOptimizations(container, country);
+
+ const isDev = false; // nastav na true, pokud chceš vývojový mód
+
+if (isDev) {
+  console.log('Development mode');
+}
+  // 4. Vytvoř widget s country-specific konfigurací
+  const widgetConfig = getWidgetConfig(country);
+  const widget = new PPLWidget(container, widgetConfig);
+
+  // 5. Přidej country info do widget instance
+  widget.country = country;
+  widget.countryConfig = countryConfig;
+
+  // 6. Global reference pro debugging
+  window.pplWidget = widget;
+
+  console.log(`✅ PPL Widget initialized successfully for ${country}`);
+});
 
 // === EXPORT PRO DALŠÍ POUŽITÍ ===
-if (typeof window !== 'undefined') {
-  window.PPLCountryConfigs = COUNTRY_CONFIGS;
-  window.detectPPLCountry = detectCountry;
-} else {
-  // Node.js export
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-      PPLWidget,
-      COUNTRY_CONFIGS,
-      detectCountry
-    };
-  }
-}
-
+window.PPLCountryConfigs = COUNTRY_CONFIGS;
+window.detectPPLCountry = detectCountry;
