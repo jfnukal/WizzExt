@@ -2901,7 +2901,16 @@ class PPLWidget {
       });
     }
 
-      // Načteme všechna data z API
+async handleGeolocationAllowed(position) {
+  console.log('Poloha získána:', position.coords);
+  const { latitude, longitude } = position.coords;
+
+  const container = this.container.querySelector('.ppl-results');
+  if (container) {
+    container.innerHTML = `<div class="ppl-loading">Vyhledávám nejbližší místa...</div>`;
+  }
+
+  // Načteme všechna data z API
   await this.loadAccessPoints();
 
   if (this.allAccessPoints.length > 0) {
