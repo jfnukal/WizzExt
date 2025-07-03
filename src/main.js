@@ -615,15 +615,16 @@ class PPLWidget {
         this.hideGlobalLoading();
       }, 500);
 
-      // KROK B: Aplikuj filtry a zobraz mapu
-     console.log('🔍 loadAccessPoints: Before applyFilters(), geolocationDenied =', this.geolocationDenied);
-
-      // NOVÁ KONTROLA: Pokud byla geolokace zamítnuta, NEAPLIKUJ filtry!
-          if (!this.geolocationDenied) {
-            this.applyFilters();
-          } else {
-            console.log('🔍 loadAccessPoints: Geolokace zamítnuta, přeskakuji applyFilters()');
-          }
+      // KROK B: Aplikuj filtry a zobraz mapu POUZE pokud nebyla geolokace zamítnuta
+            console.log('🔍 loadAccessPoints: Before applyFilters(), geolocationDenied =', this.geolocationDenied);
+            
+            if (!this.geolocationDenied) {
+              this.applyFilters();
+            } else {
+              console.log('🔍 loadAccessPoints: Geolokace zamítnuta, přeskakuji applyFilters()');
+              // Pouze zobrazíme markery na mapě, žádný seznam
+              this.renderMarkers();
+            }
 
       // KROK C: Načti detaily pro první batch sidebaru (asynchronně)
       setTimeout(() => {
@@ -2926,31 +2927,32 @@ class PPLWidget {
       }
     }
 
-      async handleGeolocationDenied() {
-      console.log('Geolokace zamítnuta nebo se nezdařila.');
-      const container = this.container.querySelector('.ppl-results');
-      if (!container) return;
-    
-      // 1. Zobrazíme v levém panelu výzvu a KONČÍME!
-      const promptMessage =
-        this.translations[this.currentLanguage].geolocationPrompt;
-      container.innerHTML = `<div class="ppl-loading" style="padding: 40px 20px;">${promptMessage}</div>`;
-    
-      // 2. Načteme data POUZE pro mapu (bez vykreslení seznamu)
-        if (this.allAccessPoints.length === 0) {
-          // Nastav flag PŘED načítáním, aby loadAccessPoints nevykreslilo seznam
-          this.geolocationDenied = true;
-          await this.loadAccessPoints();
-        }
-    
-      // 3. NESTAVÍME currentAccessPoints! Jen zobrazíme markery
-      this.renderMarkers();
-      this.fitMapToPoints();
-      this.hideGlobalLoading();
-      
-      // 4. ZABRÁNÍME jakémukoli dalšímu vykreslování seznamu
-      console.log('🔍 handleGeolocationDenied: DOKONČENO, flag nastaven na true');
-    }
+  async handleGeolocationDenied() {
+  console.log('Geolokace zamítnuta nebo se nezdařila.');
+  const container = this.container.querySelector('.ppl-results');
+  if (!container) return;
+
+  // 1. NASTAV FLAG PŘED vším ostatním
+  this.geolocationDenied = true;
+  
+  // 2. Zobrazíme v levém panelu výzvu a KONČÍME!
+  const promptMessage = this.translations[this.currentLanguage].geolocationPrompt;
+  container.innerHTML = `<div class="ppl-loading" style="padding: 40px 20px;">${promptMessage}</div>`;
+
+  // 3. Načteme data POUZE pro mapu (bez vykreslení seznamu)
+  if (this.allAccessPoints.length === 0) {
+    console.log('🔍 Loading data only for map (no sidebar)');
+    await this.loadAccessPoints();
+  }
+
+  // 4. Zobrazíme markery na mapě
+  this.renderMarkers();
+  this.fitMapToPoints();
+  this.hideGlobalLoading();
+  
+  // 5. ZABLOKUJEME jakékoli další vykreslování seznamu
+  console.log('🔍 handleGeolocationDenied: DOKONČENO, flag nastaven na true');
+}
   
   bindZoomControls() {
     try {
@@ -4238,6 +4240,11 @@ class PPLWidget {
 
   renderResults() {
   // DEBUG: Kdo volá renderResults?
+
+      if (this.geolocationDenied) {
+    console.log('🔍 renderResults: Geolokace zamítnuta, přeskakuji vykreslení seznamu');
+    return;
+      }
   console.trace('🔍 renderResults() was called from:');
   console.log('🔍 geolocationDenied flag:', this.geolocationDenied);
   console.log('🔍 currentAccessPoints length:', this.currentAccessPoints.length);
@@ -5636,151 +5643,7 @@ class PPLWidget {
     }, 100);
   }
 
-  // applyFilters() {
-  //   // Vymaž viewport cache při změně filtrů
-  //   this.clearCache('viewport');
-
-  //   const searchTerm = this.container
-  //     .querySelector('.ppl-search-input')
-  //     .value.toLowerCase()
-  //     .trim();
-  //   let filtered = [...this.allAccessPoints];
-
-  //   // Filtruj podle typu - aplikuj filtr vždy když nejsou vybrané všechny typy
-  //   if (this.selectedTypes.size > 0 && this.selectedTypes.size < 2) {
-  //     filtered = filtered.filter((p) => this.selectedTypes.has(p.type));
-  //   }
-
-  //   // Filtruj podle platby - aplikuj filtr vždy když nejsou vybrané všechny platby
-  //   if (this.selectedPayments.size > 0 && this.selectedPayments.size < 2) {
-  //     filtered = filtered.filter((p) => {
-  //       if (
-  //         this.selectedPayments.has('card') &&
-  //         !this.selectedPayments.has('cash')
-  //       ) {
-  //         return p.activeCardPayment || p.canPayByCard;
-  //       }
-  //       if (
-  //         this.selectedPayments.has('cash') &&
-  //         !this.selectedPayments.has('card')
-  //       ) {
-  //         return p.activeCashPayment;
-  //       }
-  //       return true;
-  //     });
-  //   }
-
-  //   // Filtr pro víkendový provoz
-  //   if (
-  //     this.activeFilters.has('weekend') ||
-  //     this.activeFilters.has('openOnWeekend')
-  //   ) {
-  //     const beforeCount = filtered.length;
-  //     filtered = filtered.filter((p) => this.checkWeekendOperation(p));
-  //     const afterCount = filtered.length;
-  //     console.log(
-  //       `Weekend filter applied: ${beforeCount} → ${afterCount} points`
-  //     );
-  //   }
-
-  //   // Filtr pro otevřená výdejní místa
-  //   if (this.activeFilters.has('open')) {
-  //     const beforeCount = filtered.length;
-  //     filtered = filtered.filter((p) => this.checkCurrentlyOpen(p));
-  //     const afterCount = filtered.length;
-  //     console.log(`Open filter applied: ${beforeCount} → ${afterCount} points`);
-  //   }
-
-  //   // Filtr pro volná výdejní místa (kapacita)
-  //   if (this.activeFilters.has('capacity')) {
-  //     console.log('🔋 CAPACITY FILTER ACTIVATED');
-  //     console.log('🔋 Active filters:', Array.from(this.activeFilters));
-
-  //     const beforeCount = filtered.length;
-  //     console.log(`🔋 Points before capacity filter: ${beforeCount}`);
-
-  //     // Debug: Ukážeme prvních 5 bodů a jejich kapacitu
-  //     filtered.slice(0, 5).forEach((point, index) => {
-  //       console.log(`🔋 Point ${index + 1}: ${point.name}`);
-  //       console.log(`   - Type: ${point.type}`);
-  //       console.log(`   - CapacityStatus: ${point.capacityStatus || 'NONE'}`);
-  //       console.log(
-  //         `   - CapacityInfo: ${
-  //           point.capacityInfo ? point.capacityInfo.text : 'NONE'
-  //         }`
-  //       );
-  //       console.log(`   - DetailsLoaded: ${point.detailsLoaded}`);
-  //     });
-
-  //     filtered = filtered.filter((p) => this.checkFreeCapacity(p));
-  //     const afterCount = filtered.length;
-
-  //     console.log(
-  //       `🔋 Capacity filter applied: ${beforeCount} → ${afterCount} points`
-  //     );
-
-  //     if (afterCount === 0) {
-  //       console.warn('🔋 WARNING: No points passed capacity filter!');
-  //     }
-  //   }
-
-  //   // Filtry pro otevírací dobu
-  //   if (this.activeFilters.has('before9am')) {
-  //     filtered = filtered.filter((p) => this.checkOpensBefore(p, 9 * 60)); // 9:00 v minutách
-  //   }
-
-  //   if (this.activeFilters.has('after5pm')) {
-  //     filtered = filtered.filter((p) => this.checkClosesAfter(p, 17 * 60)); // 17:00 v minutách
-  //   }
-
-  //   if (this.activeFilters.has('saturday')) {
-  //     filtered = filtered.filter((p) => this.checkOpenOnDay(p, 7)); // 7 pro sobotu (API formát)
-  //   }
-
-  //   if (this.activeFilters.has('sunday')) {
-  //     filtered = filtered.filter((p) => this.checkOpenOnDay(p, 1)); // 1 pro neděli (API formát)
-  //   }
-
-  //   // Filtr pro podání zásilky
-  //   if (this.activeFilters.has('pickup')) {
-  //     const beforeCount = filtered.length;
-  //     filtered = filtered.filter((p) => this.checkPickupEnabled(p));
-  //     const afterCount = filtered.length;
-  //     console.log(
-  //       `Pickup filter applied: ${beforeCount} → ${afterCount} points`
-  //     );
-  //   }
-
-  //   if (this.activeFilters.has('cardPayment')) {
-  //     filtered = filtered.filter((p) => p.canPayByCard);
-  //   }
-
-  //   if (searchTerm) {
-  //     filtered = filtered.filter(
-  //       (p) =>
-  //         (p.name && p.name.toLowerCase().includes(searchTerm)) ||
-  //         (p.city && p.city.toLowerCase().includes(searchTerm))
-  //     );
-  //   }
-
-  //   console.log(
-  //     `Filter applied: ${this.allAccessPoints.length} → ${filtered.length} points`
-  //   );
-  //   console.log('Selected types:', Array.from(this.selectedTypes));
-  //   console.log('Selected payments:', Array.from(this.selectedPayments));
-
-  //   this.currentAccessPoints = filtered;
-  //   this.renderAll();
-
-  //   // PŘIDÁNO: Načti detaily pro nově filtrované body
-  //   if (this.previewDataLoaded) {
-  //     setTimeout(() => {
-  //       this.loadDetailsForSidebar();
-  //     }, 100);
-  //   }
-  // }
-
-  renderAll() {
+   renderAll() {
     this.renderResults();
     this.lastViewport = null;
     this.renderMarkers();
