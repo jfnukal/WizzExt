@@ -2901,31 +2901,31 @@ class PPLWidget {
       });
     }
 
-async handleGeolocationAllowed(position) {
-  console.log('Poloha získána:', position.coords);
-  const { latitude, longitude } = position.coords;
-
-  const container = this.container.querySelector('.ppl-results');
-  if (container) {
-    container.innerHTML = `<div class="ppl-loading">Vyhledávám nejbližší místa...</div>`;
-  }
-
-  // Načteme všechna data z API
-  await this.loadAccessPoints();
-
-  if (this.allAccessPoints.length > 0) {
-    const nearbyPoints = this.findNearbyAccessPoints(latitude, longitude, 15);
-
-    if (nearbyPoints.length > 0) {
-      console.log(`Nalezeno ${nearbyPoints.length} blízkých bodů.`);
-      this.currentAccessPoints = nearbyPoints;
-      this.renderAll(); // Vykreslíme jen blízké body
-      this.map.setView([latitude, longitude], 12);
-    } else {
-      await this.handleGeolocationDenied();
+    async handleGeolocationAllowed(position) {
+      console.log('Poloha získána:', position.coords);
+      const { latitude, longitude } = position.coords;
+    
+      const container = this.container.querySelector('.ppl-results');
+      if (container) {
+        container.innerHTML = `<div class="ppl-loading">Vyhledávám nejbližší místa...</div>`;
+      }
+    
+      // Načteme všechna data z API
+      await this.loadAccessPoints();
+    
+      if (this.allAccessPoints.length > 0) {
+        const nearbyPoints = this.findNearbyAccessPoints(latitude, longitude, 15);
+    
+        if (nearbyPoints.length > 0) {
+          console.log(`Nalezeno ${nearbyPoints.length} blízkých bodů.`);
+          this.currentAccessPoints = nearbyPoints;
+          this.renderAll(); // Vykreslíme jen blízké body
+          this.map.setView([latitude, longitude], 12);
+        } else {
+          await this.handleGeolocationDenied();
+        }
+      }
     }
-  }
-}
 
   async handleGeolocationDenied() {
   console.log('Geolokace zamítnuta nebo se nezdařila.');
