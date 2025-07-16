@@ -1,5 +1,6 @@
 /* mobile.css */
 @import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 /* Styly pro tablety a menší desktopy */
 @media (max-width: 768px) {
